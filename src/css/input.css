@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+@layer components {
+    .js-list div {
+        @apply flex items-center justify-between bg-gray-300;
+    }
+    .done{
+        @apply text-green-500 line-through;
+    }
+}

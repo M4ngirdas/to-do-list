@@ -5,11 +5,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./src/css/input.css">
+  <script src="/src/js/script.js" defer></script>
+  <script src="https://kit.fontawesome.com/02441b9cc1.js" crossorigin="anonymous"></script>
   <title>To-do list project</title>
 </head>
 
-<body>
-  
+<body class="flex justify-center items-center h-screen">
+  <main class="flex flex-col gap-2 bg-gray-200 p-5">
+    <a href="index.html">
+      <h1 class="text-4xl font-bold">To-do list</h1>
+    </a>
+    <div>
+      <input class="js-input-box border border-gray-300 outline-none px-1 h-8" type="text"
+        placeholder="Type something...">
+      <button class="js-add-btn bg-amber-600 text-yellow-50 rounded-sm cursor-pointer h-8 px-2"><i
+          class="fa-solid fa-plus"></i></button>
+    </div>
+    <div class="js-list flex flex-col gap-2"></div>
+    <button class="js-clear-btn hidden bg-amber-600 text-yellow-50 rounded-sm cursor-pointer h-8">Clear all</button>
+  </main>
 </body>
 
 </html>
