@@ -1,28 +1,32 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./src/css/input.css">
-  <script src="/src/js/script.js" defer></script>
+  <script src="./src/js/script.js" defer></script>
   <script src="https://kit.fontawesome.com/02441b9cc1.js" crossorigin="anonymous"></script>
   <title>To-do list project</title>
 </head>
 
-<body class="flex justify-center items-center h-screen">
-  <main class="flex flex-col gap-2 bg-gray-200 p-5">
+<body class="flex flex-col gap-3 justify-center items-center h-screen bg-white">
+  <main class="grid gap-3 w-70 p-5 rounded-sm bg-gray-700 text-white">
     <a href="index.html">
       <h1 class="text-4xl font-bold">To-do list</h1>
     </a>
-    <div>
-      <input class="js-input-box border border-gray-300 outline-none px-1 h-8" type="text"
-        placeholder="Type something...">
-      <button class="js-add-btn bg-amber-600 text-yellow-50 rounded-sm cursor-pointer h-8 px-2"><i
+    <div class="flex justify-between">
+      <input
+        class="js-input-box outline-none px-1 h-8 w-50 rounded-sm bg-gray-600 placeholder:text-gray-400"
+        type="text" placeholder="Enter task here...">
+      <button
+        class="js-add-btn bg-white text-gray-700 cursor-pointer h-8 w-8 px-2 rounded-sm font-semibold hover:bg-white/85"><i
           class="fa-solid fa-plus"></i></button>
     </div>
     <div class="js-list flex flex-col gap-2"></div>
-    <button class="js-clear-btn hidden bg-amber-600 text-yellow-50 rounded-sm cursor-pointer h-8">Clear all</button>
+    <button
+      class="js-clear-btn hidden justify-center items-center bg-white text-gray-700 rounded-sm cursor-pointer h-8 font-semibold hover:bg-white/85">Clear
+      all</button>
   </main>
 </body>
 

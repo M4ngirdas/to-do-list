@@ -7,20 +7,22 @@ function loadTask() {
     if (inputBox.value.trim() === "") return;
 
     const checkbox = document.createElement("input");
-
     checkbox.type = "checkbox";
 
     const task = document.createElement("p");
 
     task.textContent = inputBox.value;
 
-    const del = document.createElement("button");
+    const del = document.createElement("i");
 
-    del.innerHTML = `<i class="fa-solid fa-circle-xmark"></i>`;
+    del.classList.add("del");
+
+    del.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
 
     const taskDiv = document.createElement("div");
 
     const taskDiv2 = document.createElement("div");
+    taskDiv2.classList.add("taskDiv2");
 
     inputBox.value = "";
 

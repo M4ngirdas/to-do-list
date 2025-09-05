@@ -2,9 +2,18 @@
 
 @layer components {
     .js-list div {
-        @apply flex items-center justify-between bg-gray-300;
+        @apply flex items-center justify-between bg-gray-600 dark:text-white h-8 rounded-sm gap-1;
     }
-    .done{
-        @apply text-green-500 line-through;
+
+    .taskDiv2{
+        @apply px-2;
+    }
+
+    .del {
+        @apply flex justify-center items-center cursor-pointer bg-red-500 text-white h-full w-8 rounded-sm rounded-l-none;
+    }
+
+    .done {
+        @apply text-lime-500 line-through;
     }
 }
