@@ -1,19 +1,30 @@
 @import "tailwindcss";
 
+@theme {
+    --font-display: "Inter", sans-serif;
+    --color-base: #F2F3F4;
+    --color-primary: #11151c;
+    --color-accent: #777887;
+}
+
 @layer components {
-    .js-list div {
-        @apply flex items-center justify-between bg-gray-600 dark:text-white h-8 rounded-sm gap-1;
+    .todo-checkbox {
+        @apply flex justify-center items-center bg-base rounded-md text-lg w-12 cursor-pointer h-full;
     }
 
-    .taskDiv2{
-        @apply px-2;
+    .todo-del {
+        @apply flex justify-center items-center bg-red-500 text-base rounded-md px-2 text-lg cursor-pointer h-full;
     }
 
-    .del {
-        @apply flex justify-center items-center cursor-pointer bg-red-500 text-white h-full w-8 rounded-sm rounded-l-none;
+    .todo-div-pri {
+        @apply flex gap-2 text-lg;
+    }
+
+    .todo-div-sec{
+        @apply flex justify-between flex-1 px-2 outline-none rounded-md text-lg p-2 border-1 border-accent;
     }
 
     .done {
-        @apply text-lime-500 line-through;
+        @apply text-green-500 line-through;
     }
 }

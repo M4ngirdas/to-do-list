@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
@@ -7,25 +7,38 @@
   <link rel="stylesheet" href="./src/css/input.css">
   <script src="./src/js/script.js" defer></script>
   <script src="https://kit.fontawesome.com/02441b9cc1.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
   <title>To-do list project</title>
 </head>
 
-<body class="flex flex-col gap-3 justify-center items-center h-screen bg-white">
-  <main class="grid gap-3 w-70 p-5 rounded-sm bg-gray-700 text-white">
-    <a href="index.html">
-      <h1 class="text-4xl font-bold">To-do list</h1>
+<body class="flex flex-col justify-center items-center h-screen px-110 font-display bg-base text-base">
+  <header class="absolute left-0 top-0 p-5">
+    <a href="menu.html">
+      <button class="bg-primary text-base p-1 px-3"><i class="fa-solid fa-left-long"></i> Back to menu</button>
     </a>
+  </header>
+  <main class="grid p-4 gap-4 rounded-md w-full bg-primary">
     <div class="flex justify-between">
-      <input
-        class="js-input-box outline-none px-1 h-8 w-50 rounded-sm bg-gray-600 placeholder:text-gray-400"
-        type="text" placeholder="Enter task here...">
-      <button
-        class="js-add-btn bg-white text-gray-700 cursor-pointer h-8 w-8 px-2 rounded-sm font-semibold hover:bg-white/85"><i
-          class="fa-solid fa-plus"></i></button>
+      <div>
+        <h1 class="text-5xl font-extrabold">List name</h1>
+        <h2 class="text-lg font-semibold text-accent">List description</h2>
+      </div>
+      <h3 class="js-checkbox-track text-xl"></h3>
     </div>
-    <div class="js-list flex flex-col gap-2"></div>
+    <div class="flex justify-between gap-2">
+      <button class="js-add-btn cursor-pointer rounded-md text-lg w-12 font-bold bg-base text-primary"><i
+          class="fa-solid fa-plus"></i></button>
+      <input
+        class="js-input-box flex-1 px-2 outline-none rounded-md text-lg p-2 border-1 border-accent placeholder:text-accent"
+        type="text" placeholder="Enter task here...">
+    </div>
+    <div class="js-list grid gap-2"></div>
     <button
-      class="js-clear-btn hidden justify-center items-center bg-white text-gray-700 rounded-sm cursor-pointer h-8 font-semibold hover:bg-white/85">Clear
+      class="js-clear-btn hidden  font-semibold justify-center cursor-pointer rounded-md p-2 bg-base text-primary">Clear
       all</button>
   </main>
 </body>
