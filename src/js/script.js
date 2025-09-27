@@ -1,19 +1,20 @@
-const inputBox = document.querySelector(".js-input-box");
-const list = document.querySelector(".js-list");
-const addBtn = document.querySelector(".js-add-btn");
-const clearBtn = document.querySelector(".js-clear-btn");
+
+const taskInput = document.querySelector(".js-task-input");
+const taskList = document.querySelector(".js-task-list");
+const taskAdd = document.querySelector(".js-task-add");
+const taskClear = document.querySelector(".js-task-clear");
 const taskProgress = document.querySelector(".js-task-progress");
 
 function loadTask() {
 
-    if (inputBox.value.trim() === "") return;
+    if (taskInput.value.trim() === "") return;
 
     const checkbox = document.createElement("div");
     checkbox.classList.add("todo-checkbox");
 
     const task = document.createElement("p");
 
-    task.textContent = inputBox.value;
+    task.textContent = taskInput.value;
 
     const del = document.createElement("div");
     del.classList.add("todo-del");
@@ -26,26 +27,26 @@ function loadTask() {
     const taskDiv2 = document.createElement("div");
     taskDiv2.classList.add("todo-div-sec");
 
-    inputBox.value = "";
+    taskInput.value = "";
 
     taskDiv.appendChild(checkbox);
     taskDiv2.appendChild(task);
     taskDiv2.appendChild(del);
     taskDiv.appendChild(taskDiv2);
-    list.appendChild(taskDiv);
+    taskList.appendChild(taskDiv);
 
     checkbox.addEventListener("click", () => {
         task.classList.toggle("done");
         if (task.classList.contains("done")) {
-            handleCheckboxTrack();
+            handleTaskProgress();
             checkbox.innerHTML = `<i class="fa-solid fa-check"></i>`;
             checkbox.classList.add(
                 "bg-green-500",
-                "text-base"
+                "text-base",
             );
         }
         else {
-            handleCheckboxTrack();
+            handleTaskProgress();
             checkbox.innerHTML = "";
             checkbox.classList.remove(
                 "bg-green-500",
@@ -56,46 +57,69 @@ function loadTask() {
 
     del.addEventListener("click", () => {
         taskDiv.remove();
-        handleClearBtn();
-        handleCheckboxTrack();
-    });
-
-    clearBtn.addEventListener("click", () => {
-        list.innerHTML = "";
-        handleClearBtn();
+        handleTaskClear();
         handleTaskProgress();
     });
 
-    handleClearBtn();
+    taskClear.addEventListener("click", () => {
+        if (taskClear.textContent === "Clear all") {
+            taskClear.textContent = "Are you sure?";
+            taskClear.setTimeout(() => {
+                taskClear.textContent = "Clear all";
+            }, 2000);
+        }
+        else {
+            taskList.innerHTML = "";
+        }
+
+        handleTaskProgress();
+    });
+
+    handleTaskClear();
     handleTaskProgress();
 }
 
-function handleClearBtn() {
-    if (list.children.length > 0) {
-        clearBtn.style.display = "flex";
-    }
-    else {
-        clearBtn.style.display = "none";
-    }
+function handleTaskClear() {
+    taskList.children.length > 0 ? taskClear.style.display = "flex" : taskClear.style.display = "none";
 }
 
 function handleTaskProgress() {
-    let total = list.children.length;
-    let done = list.querySelectorAll(".done").length;
+    let total = taskList.children.length;
+    let done = taskList.querySelectorAll(".done").length;
 
     if (total === 0 || done === 0) {
-        checkboxTrack.textContent = "";
+        taskProgress.textContent = "";
     }
     else if (done === total) {
-        checkboxTrack.innerHTML = `<span class="font-bold">All done.</span> Great job!`;
+        taskProgress.innerHTML = `<span class="font-bold text-green-500">All done.</span>`;
     }
     else {
-        checkboxTrack.textContent = `${done}/${total} Done`;
+        taskProgress.textContent = `${done}/${total} Done`;
     }
 }
 
-inputBox.addEventListener("keydown", (event) => {
+function handleTodoRename(open) {
+    const settings = document.querySelector(".js-todo-settings");
+
+    open ? settings.style.display = "grid" : settings.style.display = "none";
+
+    const title = document.querySelector(".js-todo-title");
+    const desc = document.querySelector(".js-todo-desc");
+    const titleInput = document.querySelector(".js-todo-title-input")
+    const descInput = document.querySelector(".js-todo-desc-input");
+
+    document.querySelector(".js-rename-save").addEventListener("click", () => {
+        title.textContent = titleInput.value;
+        desc.textContent = descInput.value;
+    });
+}
+
+document.querySelector(".js-todo-rename").addEventListener("click", () => handleTodoRename(true));
+document.querySelector(".js-rename-save").addEventListener("click", () => handleTodoRename(false));
+document.querySelector(".js-rename-close").addEventListener("click", () => handleTodoRename(false));
+
+taskInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") loadTask();
 });
 
-addBtn.addEventListener("click", loadTask);
+taskAdd.addEventListener("click", loadTask);

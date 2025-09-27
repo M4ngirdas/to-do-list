@@ -5,6 +5,7 @@
     --color-base: #F2F3F4;
     --color-primary: #11151c;
     --color-accent: #777887;
+    --color-destructive: #C74042;
 }
 
 @layer components {
@@ -13,15 +14,15 @@
     }
 
     .todo-del {
-        @apply flex justify-center items-center bg-red-500 text-base rounded-md px-2 text-lg cursor-pointer h-full;
+        @apply flex justify-center items-center bg-destructive text-base rounded-md px-2 text-lg cursor-pointer h-full;
     }
 
     .todo-div-pri {
         @apply flex gap-2 text-lg;
     }
 
-    .todo-div-sec{
-        @apply flex justify-between flex-1 px-2 outline-none rounded-md text-lg p-2 border-1 border-accent;
+    .todo-div-sec {
+        @apply flex justify-between flex-1 px-2 outline-none rounded-md text-lg p-2 border-1 border-base/20;
     }
 
     .done {

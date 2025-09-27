@@ -15,31 +15,61 @@
   <title>To-do list project</title>
 </head>
 
-<body class="flex flex-col justify-center items-center h-screen px-110 font-display bg-base text-base">
-  <header class="absolute left-0 top-0 p-5">
+<body class="flex flex-col justify-center items-center h-screen px-110 font-display bg-primary text-base">
+  <header class="absolute inset-0 p-5">
     <a href="menu.html">
-      <button class="bg-primary text-base p-1 px-3"><i class="fa-solid fa-left-long"></i> Back to menu</button>
+      <button class="cursor-pointer rounded-md p-2 px-3 hover:bg-base/10">Go back</button>
     </a>
   </header>
-  <main class="grid p-4 gap-4 rounded-md w-full bg-primary">
+  <main class="relative grid p-4 gap-4 rounded-md w-full border-1 border-base/20">
+
     <div class="flex justify-between">
-      <div>
-        <h1 class="text-5xl font-extrabold">List name</h1>
-        <h2 class="text-lg font-semibold text-accent">List description</h2>
+
+      <div class="js-todo-rename">
+        <h1 class="js-todo-title text-5xl font-extrabold cursor-pointer">List title</h1>
+        <h2 class="js-todo-desc text-lg text-accent cursor-pointer">List description</h2>
       </div>
-      <h3 class="js-checkbox-track text-xl"></h3>
+
+      <h3 class="js-task-progress text-xl"></h3>
+
     </div>
+
     <div class="flex justify-between gap-2">
-      <button class="js-add-btn cursor-pointer rounded-md text-lg w-12 font-bold bg-base text-primary"><i
+      <button class="js-task-add cursor-pointer rounded-md text-lg w-12 font-bold bg-base text-primary"><i
           class="fa-solid fa-plus"></i></button>
       <input
-        class="js-input-box flex-1 px-2 outline-none rounded-md text-lg p-2 border-1 border-accent placeholder:text-accent"
+        class="js-task-input flex-1 px-2 p-2 outline-none rounded-md text-lg select-none bg-base/10 placeholder:text-accent"
         type="text" placeholder="Enter task here...">
     </div>
-    <div class="js-list grid gap-2"></div>
+    <div class="js-task-list grid gap-2"></div>
     <button
-      class="js-clear-btn hidden  font-semibold justify-center cursor-pointer rounded-md p-2 bg-base text-primary">Clear
+      class="js-task-clear hidden font-semibold justify-center cursor-pointer rounded-md text-lg p-2 bg-base/10">Clear
       all</button>
+
+    <form
+      class="js-todo-settings hidden w-full gap-4 rounded-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4 bg-primary text-base">
+      <div>
+        <h1 class="text-5xl font-extrabold select-none">Settings</h1>
+        <h2 class="text-lg select-none text-accent">Rename your To-do list</h2>
+      </div>
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-1">
+          <label class="text-lg" for="taskTitle">Title</label>
+          <input class="js-todo-title-input flex-1 px-2 p-2 outline-none rounded-md text-lg border-1 border-accent placeholder:text-accent"
+            id="taskTitle" type="text" placeholder="Write here...">
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-lg" for="taskDesc">Description</label>
+          <input class="js-todo-desc-input flex-1 px-2 p-2 outline-none rounded-md text-lg border-1 border-accent placeholder:text-accent"
+            id="taskDesc" type="text" placeholder="Write here...">
+        </div>
+      </div>
+      <div class="flex gap-2 font-semibold">
+        <button type="button" class="js-rename-save flex-1 cursor-pointer rounded-md bg-base/10 text-base">Save changes</button>
+        <button class="js-rename-close cursor-pointer rounded-md p-2 px-3 bg-destructive text-base">Cancel</button>
+      </div>
+    </form>
+
   </main>
 </body>
 
