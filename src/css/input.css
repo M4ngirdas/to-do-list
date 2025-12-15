@@ -3,3 +3,9 @@
 @theme {
     --font-display: "Arimo", sans-serif;
 }
+
+@layer base{
+    button{
+        @apply cursor-pointer
+    }
+}
