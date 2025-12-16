@@ -1,13 +1,41 @@
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { nanoid } from "nanoid"
-import { FaPlus } from "react-icons/fa"
+import { FaCog, FaPlus } from "react-icons/fa"
 
 import { Task } from "./components/Task.jsx"
+import { Settings } from "./components/Settings.jsx"
 
 export function App() {
 
+    const [title, setTitle] = useState("List title")
+    const [desc, setDesc] = useState("List description")
     const [tasks, setTasks] = useState([])
+    const [confirmation, setConfirmation] = useState(false)
+    const [settingsOpen, setSettingsOpen] = useState(false)
+
+    const settingsRef = useRef(null)
+    const taskInputRef = useRef(null)
+
+    function handleTaskInputFocus() {
+        taskInputRef.current.focus()
+    }
+
+    function showSettings() {
+        if (settingsRef.current) {
+            settingsRef.current.showModal()
+            setSettingsOpen(true)
+        }
+    }
+
+    function closeSettings() {
+        if (settingsRef.current) {
+            settingsRef.current.close()
+            setSettingsOpen(false)
+            handleTaskInputFocus()
+        }
+    }
+
 
     function checkTask(id) {
         setTasks(prevTasks => prevTasks.map((task) => (
@@ -33,6 +61,17 @@ export function App() {
         )
     }
 
+    function handleConfirmation() {
+        setConfirmation(true)
+        setTimeout(() => (
+            setConfirmation(false)
+        ), 2000)
+        if (confirmation) {
+            setTasks([])
+            setConfirmation(false)
+        }
+    }
+
     const taskElements = tasks.map(task => (
         <Task
             key={task.id}
@@ -44,21 +83,34 @@ export function App() {
     ))
 
     return (
-        <main className="flex justify-center items-center h-screen text-lg font-display text-yellow-50 bg-slate-950">
-            <div className="grid gap-4">
-                <div>
-                    <h1 className="font-black text-7xl">List title</h1>
-                    <p className="text-lg">List description</p>
+        <>
+            <main className="flex justify-center items-center h-screen text-lg text-yellow-50 bg-slate-950">
+                <div className="grid gap-4">
+                    <div className="flex justify-center">
+                        <button onClick={showSettings} className="flex justify-center items-center gap-2 w-60 font-semibold absolute top-4 rounded-sm p-2 bg-slate-800"><FaCog /> Settings</button>
+                    </div>
+                    <div>
+                        <h1 className="font-bold text-7xl">{title}</h1>
+                        <p className="text-lg">{desc}</p>
+                    </div>
+                    <form action={addTask} className="flex gap-2">
+                        <button className="grid place-items-center w-12 rounded-sm bg-slate-800"><FaPlus /></button>
+                        <input ref={taskInputRef} className="flex-1 h-12 outline-none p-2 rounded-sm border-2 border-slate-700 placeholder:text-slate-700" name="taskInput" type="text" placeholder="Enter task here..." />
+                    </form>
+                    {tasks.length > 0 ? <section className="grid gap-4">
+                        <div className="grid gap-2">{taskElements}</div>
+                        <button onClick={handleConfirmation} className="p-2 rounded-sm font-semibold bg-slate-800">{confirmation ? <p>Are you sure? <span className="italic">(click to confirm)</span></p> : "Clear all"}</button>
+                    </section> : null}
                 </div>
-                <form action={addTask} className="flex gap-2">
-                    <button className="grid place-items-center w-12 rounded-sm bg-slate-800"><FaPlus /></button>
-                    <input className="h-12 outline-none p-2 rounded-sm border-2 border-slate-700 placeholder:text-slate-700" name="taskInput" type="text" placeholder="Enter task here..." />
-                </form>
-                {tasks.length > 0 ? <section className="grid gap-4">
-                    <div className="grid gap-2">{taskElements}</div>
-                    <button onClick={() => setTasks([])} className="p-2 rounded-sm font-semibold bg-slate-800">Clear all</button>
-                </section> : null}
-            </div>
-        </main>
+            </main>
+            <Settings
+                settingsRef={settingsRef}
+                settingsOpen={settingsOpen}
+                closeSettings={closeSettings}
+                setTitle={setTitle}
+                setDesc={setDesc}
+                handleTaskInputFocus={handleTaskInputFocus}
+            />
+        </>
     )
 }

@@ -4,8 +4,14 @@
     --font-display: "Arimo", sans-serif;
 }
 
-@layer base{
-    button{
-        @apply cursor-pointer
+@layer base {
+    button {
+        @apply cursor-pointer select-none
+    }
+}
+
+@layer components {
+    .floating-label {
+        @apply absolute ml-5 left-0 top-1/2 -translate-y-1/2 transition-all font-semibold cursor-text  bg-slate-900 text-slate-500 peer-focus:top-0 peer-focus:px-2 peer-focus:ml-2 peer-focus:text-base peer-focus:text-yellow-50 peer-valid:top-0 peer-valid:ml-2 peer-valid:px-2 peer-valid:text-base
     }
 }
