@@ -8,8 +8,14 @@ import { Settings } from "./components/Settings.jsx"
 
 export function App() {
 
-    const [title, setTitle] = useState("List title")
-    const [desc, setDesc] = useState("List description")
+    const [title, setTitle] = useState(() => {
+        const savedTitle = localStorage.getItem("title")
+        return savedTitle || "List title"
+    })
+    const [desc, setDesc] = useState(() => {
+        const savedDesc = localStorage.getItem("desc")
+        return savedDesc || "List description"
+    })
     const [tasks, setTasks] = useState(() => {
         const savedTasks = localStorage.getItem("tasks")
         return JSON.parse(savedTasks) || []
@@ -19,6 +25,15 @@ export function App() {
 
     const settingsRef = useRef(null)
     const taskInputRef = useRef(null)
+
+    useEffect(() => {
+        localStorage.setItem("title", title)
+        localStorage.setItem("desc", desc)
+    }, [title && desc])
+
+    useEffect(() => (
+        localStorage.setItem("tasks", JSON.stringify(tasks))
+    ), [tasks])
 
     function handleTaskInputFocus() {
         taskInputRef.current.focus()
@@ -55,10 +70,6 @@ export function App() {
                 : task
         )))
     }
-
-    useEffect(() => (
-        localStorage.setItem("tasks", JSON.stringify(tasks))
-    ), [tasks])
 
     function addTask(formData) {
         const task = formData.get("taskInput")
@@ -102,10 +113,10 @@ export function App() {
                     </div>
                     <form action={addTask} className="flex gap-2">
                         <button className="grid place-items-center w-12 rounded-sm bg-slate-800"><FaPlus /></button>
-                        <div className="relative">
+                        <div className="relative w-full">
                             <input
                                 ref={taskInputRef}
-                                className="peer h-12 outline-none p-2 rounded-sm border-2 border-slate-800 focus:border-yellow-50"
+                                className="peer w-full h-12 outline-none p-2 rounded-sm border-2 border-slate-800 focus:border-yellow-50"
                                 id="taskInput"
                                 name="taskInput"
                                 type="text"
