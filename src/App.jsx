@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { nanoid } from "nanoid"
 import { FaCog, FaPlus } from "react-icons/fa"
 
@@ -10,7 +10,10 @@ export function App() {
 
     const [title, setTitle] = useState("List title")
     const [desc, setDesc] = useState("List description")
-    const [tasks, setTasks] = useState([])
+    const [tasks, setTasks] = useState(() => {
+        const savedTasks = localStorage.getItem("tasks")
+        return JSON.parse(savedTasks) || []
+    })
     const [confirmation, setConfirmation] = useState(false)
     const [settingsOpen, setSettingsOpen] = useState(false)
 
@@ -52,6 +55,10 @@ export function App() {
                 : task
         )))
     }
+
+    useEffect(() => (
+        localStorage.setItem("tasks", JSON.stringify(tasks))
+    ), [tasks])
 
     function addTask(formData) {
         const task = formData.get("taskInput")
@@ -95,7 +102,18 @@ export function App() {
                     </div>
                     <form action={addTask} className="flex gap-2">
                         <button className="grid place-items-center w-12 rounded-sm bg-slate-800"><FaPlus /></button>
-                        <input ref={taskInputRef} className="flex-1 h-12 outline-none p-2 rounded-sm border-2 border-slate-700 placeholder:text-slate-700" name="taskInput" type="text" placeholder="Enter task here..." />
+                        <div className="relative">
+                            <input
+                                ref={taskInputRef}
+                                className="peer h-12 outline-none p-2 rounded-sm border-2 border-slate-800 focus:border-yellow-50"
+                                id="taskInput"
+                                name="taskInput"
+                                type="text"
+                                required
+                                placeholder=" "
+                            ></input>
+                            <label htmlFor="taskInput" className="floating-label bg-slate-950">Enter task here</label>
+                        </div>
                     </form>
                     {tasks.length > 0 ? <section className="grid gap-4">
                         <div className="grid gap-2">{taskElements}</div>
