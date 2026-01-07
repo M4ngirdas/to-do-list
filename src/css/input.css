@@ -5,22 +5,42 @@
 }
 
 @layer base {
+    body {
+        @apply overflow-hidden font-display bg-slate-950 text-yellow-50
+    }
+
     button {
         @apply cursor-pointer select-none
+    }
+
+    meter::-webkit-meter-bar {
+        background: #1e293b;
+        border-radius: 12px;
+    }
+
+    meter::-webkit-meter-optimum-value {
+        background: #059669;
     }
 }
 
 @layer components {
-    .floating-label {
-        @apply select-none absolute ml-5 left-0 top-1/2 -translate-y-1/2 transition-all duration-200 font-semibold cursor-text bg-slate-900 text-slate-500 peer-focus:top-0 peer-focus:px-2 peer-focus:ml-2 peer-focus:text-base peer-focus:text-yellow-50 peer-valid:top-0 peer-valid:ml-2 peer-valid:px-2 peer-valid:text-base
+    #root {
+        @apply h-full
     }
-}
 
-meter::-webkit-meter-bar {
-    background: #1e293b;
-    border-radius: 4px;
-}
+    .floating-label {
+        @apply pointer-events-none select-none absolute ml-5 left-0 top-1/2 -translate-y-1/2 transition-all duration-200 font-semibold cursor-text bg-slate-900 text-slate-500 peer-focus:top-0 peer-focus:px-2 peer-focus:ml-2 peer-focus:text-base peer-focus:text-yellow-50 peer-valid:top-0 peer-valid:ml-2 peer-valid:px-2 peer-valid:text-base
+    }
 
-meter::-webkit-meter-optimum-value {
-    background: #059669;
+    .scrollbar::-webkit-scrollbar {
+        @apply w-3
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+        @apply rounded-xl bg-slate-900
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+        @apply rounded-xl bg-slate-800
+    }
 }
