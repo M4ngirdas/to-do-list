@@ -25,20 +25,20 @@ export default function Settings(props) {
 
     return (
         <>
-            {props.settingsOpen ? <div className="absolute inset-0 bg-black/50"></div> : null}
+            {props.settingsOpen ? <div className="absolute z-49 inset-0 bg-black/50"></div> : null}
             <dialog
                 ref={props.settingsRef}
                 onCancel={props.closeSettings}
-                className={`${props.settingsOpen ? "grid" : "hidden"} w-full sm:max-w-xl 2xl:max-w-2xl gap-4 text-lg rounded-md p-4 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-900 text-yellow-50`}>
+                className={`${props.settingsOpen ? "grid" : "hidden"} z-50 w-full text-base sm:max-w-xl md:text-lg 2xl:max-w-2xl gap-4 rounded-md p-4 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-900 text-yellow-50`}>
                 <section className="flex justify-between">
                     <div>
-                        <h1 className="font-bold text-6xl">Settings</h1>
+                        <h1 className="font-bold text-4xl md:text-5xl">Settings</h1>
                         <p className="text-slate-500">{props.settingsSource === "menu" ? "Create a new" : "Rename your"} to-do list.</p>
                     </div>
                     <button onClick={props.closeSettings} className="grid place-items-center w-7 h-7 rounded-sm p-1 bg-red-500"><FaTimes /></button>
                 </section>
                 <form action={handleSettings} className="grid gap-4">
-                    <section className="flex gap-2 w-full">
+                    <section className="grid gap-4 w-full md:flex md:gap-2">
                         <div className="relative w-full">
                             <input
                                 className="peer w-full h-12 outline-none p-2 rounded-sm border-2 border-slate-800 focus:border-yellow-50"

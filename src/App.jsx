@@ -1,8 +1,9 @@
 
 import { useState, useEffect, useRef } from "react"
 import { nanoid } from "nanoid"
-import { FaCog, FaPlus } from "react-icons/fa"
+import { FaBars, FaPlus, FaTimes } from "react-icons/fa"
 
+import Todo from "./components/Todo.jsx"
 import Task from "./components/Task.jsx"
 import Menu from "./components/Menu.jsx"
 import Settings from "./components/Settings.jsx"
@@ -16,6 +17,7 @@ export default function App() {
     const [confirmation, setConfirmation] = useState(false)
     const [settingsOpen, setSettingsOpen] = useState(false)
     const [settingsSource, setSettingsSource] = useState(null)
+    const [menuOpen, setMenuOpen] = useState(false)
 
     const settingsRef = useRef(null)
 
@@ -94,54 +96,55 @@ export default function App() {
     return (
         <>
             <div className="flex h-screen">
-                <Menu
-                    showSettings={() => showSettings("menu")}
-                    openTodo={openTodo}
-                    setTodos={setTodos}
-                    todos={todos}
-                    currentTodo={currentTodo}
-                />
+                <div>
+                    <div className="block md:hidden">
+                        {todos.length === 0 ? <div className="p-6">
+                            <button onClick={() => showSettings("menu")} className="flex justify-between items-center w-60 font-semibold ml-1 gap-2 p-2 rounded-sm bg-slate-800">Create new <FaPlus /></button>
+                        </div> : null}
+                        <div className={`${menuOpen ? "flex" : "hidden"} justify-between gap-4 w-full sm:w-fit p-6 fixed z-48 h-full bg-gray-950`}>
+                            <Menu
+                                showSettings={() => showSettings("menu")}
+                                openTodo={openTodo}
+                                setTodos={setTodos}
+                                todos={todos}
+                                currentTodo={currentTodo}
+                                forSmallerScreens={true}
+                                setMenuOpen={setMenuOpen}
+                            />
+                            <div>
+                                <button onClick={() => setMenuOpen(false)} className="grid place-items-center h-7 w-7 rounded-sm p-1 bg-red-500"><FaTimes /></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="hidden md:flex">
+                        <Menu
+                            showSettings={() => showSettings("menu")}
+                            openTodo={openTodo}
+                            setTodos={setTodos}
+                            todos={todos}
+                            currentTodo={currentTodo}
+                            forSmallerScreens={false}
+                            setMenuOpen={setMenuOpen}
+                        />
+                    </div>
+                </div>
                 {todos.length === 0 ? <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
                     <h1 className="text-4xl">You haven't created a to-do list yet!</h1>
                     <h2>Click create new to make one</h2>
                 </div> : null}
-                {todos.length > 0 ? <main className="flex flex-col flex-1 items-center p-6 text-lg">
-                    <div className={`${tasksLength > 0 ? "gap-15" : ""} flex flex-col min-h-0 w-full mx-auto my-auto md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl`}>
-                        <section className="flex flex-col gap-4 min-h-0">
-                            <div className="flex justify-between wrap-anywhere">
-                                <div>
-                                    <h1 className="font-bold text-6xl">{currentTodo ? currentTodo.title : null}</h1>
-                                    <p className="text-slate-500">{currentTodo ? currentTodo.desc : null}</p>
-                                </div>
-                                <button
-                                    onClick={() => showSettings("rename")}
-                                    className="grid place-items-center gap-2 w-12 h-12 font-semibold top-4 rounded-sm p-2 bg-slate-800"
-                                ><FaCog />
-                                </button>
-                            </div>
-                            <form action={addTask} className="flex gap-2 w-full">
-                                <button className="grid place-items-center w-12 rounded-sm bg-slate-800"><FaPlus /></button>
-                                <div className="relative flex-1">
-                                    <input
-                                        className="peer select-none w-full flex-1 outline-none p-2 rounded-sm border-2 border-slate-800 focus:border-yellow-50"
-                                        name="taskInput"
-                                        type="text"
-                                        required
-                                        maxLength={100}
-                                    ></input>
-                                    <label className="floating-label bg-slate-950">Enter task here...</label>
-                                </div>
-                            </form>
-                            {tasksLength > 0 ? <div className="flex flex-col gap-4 min-h-0">
-                                <div className="flex items-center gap-2">
-                                    <meter className="flex-1 h-5" min={0} max={tasksLength} value={completedTaskCount}></meter>
-                                    <p className={`${completedTaskCount === tasksLength ? "text-emerald-600" : "text-slate-500"} font-semibold`}>{completedTaskCount}/{currentTodo.tasks.length} complete</p>
-                                </div>
-                                <ul className="scrollbar grid gap-2 w-full overflow-y-auto pr-2">{taskElements}</ul>
-                                <button onClick={handleConfirmation} className="p-2 rounded-sm font-semibold bg-slate-800">{confirmation ? <p>Are you sure? <span className="italic">(click to confirm)</span></p> : "Clear all"}</button>
-                            </div> : null}
-                        </section>
-                    </div>
+                {todos.length > 0 ? <main className="flex flex-col items-center flex-1 gap-4 p-6 text-base md:text-lg">
+                    {todos.length > 0 ? <button onClick={() => setMenuOpen(true)} className="flex justify-center items-center gap-2 w-full p-2 rounded-sm md:hidden outline outline-slate-800 bg-slate-900"><FaBars />Menu</button> : null}
+                    <Todo
+                        currentTodo={currentTodo}
+                        tasksLength={tasksLength}
+                        completedTaskCount={completedTaskCount}
+                        confirmation={confirmation}
+                        handleConfirmation={handleConfirmation}
+                        addTask={addTask}
+                        taskElements={taskElements}
+                        showSettings={showSettings}
+                        todos={todos}
+                    />
                 </main> : null}
             </div>
             <Settings
