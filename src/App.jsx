@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { nanoid } from "nanoid"
 import { FaBars, FaPlus, FaTimes } from "react-icons/fa"
 
@@ -7,6 +7,7 @@ import Todo from "./components/Todo.jsx"
 import Task from "./components/Task.jsx"
 import Menu from "./components/Menu.jsx"
 import Settings from "./components/Settings.jsx"
+import Confirmation from "./components/Confirmation.jsx"
 
 export default function App() {
 
@@ -14,12 +15,12 @@ export default function App() {
         const savedTodos = localStorage.getItem("todos")
         return savedTodos ? JSON.parse(savedTodos) : []
     })
-    const [confirmation, setConfirmation] = useState(false)
+    const [confirmationOpen, setConfirmationOpen] = useState(false)
+    const [confirmationSource, setConfirmationSource] = useState(null)
     const [settingsOpen, setSettingsOpen] = useState(false)
     const [settingsSource, setSettingsSource] = useState(null)
     const [menuOpen, setMenuOpen] = useState(false)
-
-    const settingsRef = useRef(null)
+    const [selectedTodoId, setSelectedTodoId] = useState(null)
 
     const currentTodo = todos.find(todo => todo.open)
     const tasksLength = currentTodo?.tasks.length
@@ -37,13 +38,7 @@ export default function App() {
 
     function showSettings(source) {
         setSettingsSource(source)
-        settingsRef.current.showModal()
         setSettingsOpen(true)
-    }
-
-    function closeSettings() {
-        settingsRef.current.close()
-        setSettingsOpen(false)
     }
 
     function addTask(formData) {
@@ -72,15 +67,19 @@ export default function App() {
         )))
     }
 
-    function handleConfirmation() {
-        setConfirmation(true)
-        setTimeout(() => (
-            setConfirmation(false)
-        ), 2000)
-        if (confirmation) {
-            setTodos(prevTodos => prevTodos.map(todo => (todo.open ? { ...todo, tasks: [] } : todo)))
-            setConfirmation(false)
-        }
+    function removeTodo(id) {
+        todos.length === 1 ? setMenuOpen(false) : null
+        setTodos(prevTodos => {
+            const filtered = prevTodos.filter(todo => id !== todo.id)
+            filtered.length > 0 ? openTodo(filtered[0].id) : null
+            return filtered
+        })
+    }
+
+    function showConfirmation(source, id) {
+        if (id) setSelectedTodoId(id)
+        setConfirmationSource(source)
+        setConfirmationOpen(true)
     }
 
     const taskElements = todos.map(todo => todo.open ? todo.tasks.map(task => (
@@ -103,13 +102,16 @@ export default function App() {
                         </div> : null}
                         <div className={`${menuOpen ? "flex" : "hidden"} justify-between gap-4 w-full sm:w-fit p-6 fixed z-48 h-full bg-gray-950`}>
                             <Menu
-                                showSettings={() => showSettings("menu")}
+                                showSettings={showSettings}
                                 openTodo={openTodo}
                                 setTodos={setTodos}
                                 todos={todos}
                                 currentTodo={currentTodo}
                                 forSmallerScreens={true}
                                 setMenuOpen={setMenuOpen}
+                                confirmationOpen={confirmationOpen}
+                                setConfirmationOpen={setConfirmationOpen}
+                                showConfirmation={showConfirmation}
                             />
                             <div>
                                 <button onClick={() => setMenuOpen(false)} className="grid place-items-center h-7 w-7 rounded-sm p-1 bg-red-500"><FaTimes /></button>
@@ -118,13 +120,16 @@ export default function App() {
                     </div>
                     <div className="hidden md:flex">
                         <Menu
-                            showSettings={() => showSettings("menu")}
+                            showSettings={showSettings}
                             openTodo={openTodo}
                             setTodos={setTodos}
                             todos={todos}
                             currentTodo={currentTodo}
                             forSmallerScreens={false}
                             setMenuOpen={setMenuOpen}
+                            confirmationOpen={confirmationOpen}
+                            setConfirmationOpen={setConfirmationOpen}
+                            showConfirmation={showConfirmation}
                         />
                     </div>
                 </div>
@@ -138,24 +143,30 @@ export default function App() {
                         currentTodo={currentTodo}
                         tasksLength={tasksLength}
                         completedTaskCount={completedTaskCount}
-                        confirmation={confirmation}
-                        handleConfirmation={handleConfirmation}
                         addTask={addTask}
                         taskElements={taskElements}
                         showSettings={showSettings}
                         todos={todos}
+                        confirmationOpen={confirmationOpen}
+                        setConfirmationOpen={setConfirmationOpen}
+                        showConfirmation={showConfirmation}
                     />
                 </main> : null}
             </div>
-            <Settings
-                settingsRef={settingsRef}
-                settingsOpen={settingsOpen}
-                closeSettings={closeSettings}
+            {settingsOpen ? <Settings
+                setSettingsOpen={setSettingsOpen}
                 settingsSource={settingsSource}
                 setTodos={setTodos}
                 todos={todos}
                 currentTodo={currentTodo}
-            />
+            /> : null}
+            {confirmationOpen ? <Confirmation
+                setConfirmationOpen={setConfirmationOpen}
+                confirmationSource={confirmationSource}
+                setTodos={setTodos}
+                selectedTodoId={selectedTodoId}
+                removeTodo={removeTodo}
+            /> : null}
         </>
     )
 }

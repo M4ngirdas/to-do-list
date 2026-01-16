@@ -28,7 +28,7 @@ export default function Todo(props) {
                     <button className="grid place-items-center w-12 rounded-sm bg-slate-800"><FaPlus /></button>
                     <div className="relative flex-1">
                         <input
-                            className="peer select-none h-12 w-full flex-1 outline-none p-2 rounded-sm border-2 border-slate-800 focus:border-yellow-50"
+                            className="peer select-none h-12 w-full flex-1 outline-none p-2 rounded-sm border border-slate-800 focus:border-yellow-50"
                             name="taskInput"
                             type="text"
                             required
@@ -43,7 +43,7 @@ export default function Todo(props) {
                         <p className={`${props.completedTaskCount === props.tasksLength ? "text-emerald-600" : "text-slate-500"} font-semibold`}>{props.completedTaskCount}/{props.currentTodo.tasks.length} complete</p>
                     </div>
                     <ul className="scrollbar grid gap-2 w-full pr-2 overflow-y-auto">{props.taskElements}</ul>
-                    <button onClick={props.handleConfirmation} className="p-2 rounded-sm font-semibold bg-slate-800">{props.confirmation ? <p>Are you sure? <span className="italic">(click to confirm)</span></p> : "Clear all"}</button>
+                    <button onClick={() => props.showConfirmation("tasks")} className="p-2 rounded-sm font-semibold bg-slate-800">Clear all</button>
                 </div> : null}
             </div>
         </section>

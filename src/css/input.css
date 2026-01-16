@@ -6,7 +6,11 @@
 
 @layer base {
     body {
-        @apply font-display bg-slate-950 text-yellow-50
+        @apply bg-slate-950 text-yellow-50
+    }
+
+    * {
+        @apply font-display
     }
 
     button {
