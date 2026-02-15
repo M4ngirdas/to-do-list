@@ -4,36 +4,31 @@ import { FaTimes } from "react-icons/fa";
 export default function Confirmation(props) {
 
     function handleConfirmation() {
-        props.confirmationSource === "todos"
-            ? props.removeTodo(props.selectedTodoId)
-            : props.setTodos(prevTodos => prevTodos.map(todo => (todo.open ? { ...todo, tasks: [] } : todo)))
-        props.setConfirmationOpen(false)
+        props.confirmation.source === "list"
+            ? props.removeList(props.selectedListId)
+            : props.setLists(prev => prev.map(list => (list.open ? { ...list, tasks: [] } : list)))
+        props.setConfirmation(prev => ({ ...prev, open: false }))
+        props.setIsDropdownOpen(false)
     }
 
     return (
         <>
-            <div className="fixed z-49 inset-0 bg-black/50"></div>
-            <div className="flex justify-center p-6 fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 z-50 w-full">
-                <div className="text-base gap-4 rounded-md p-4 w-full sm:max-w-xl md:text-lg 2xl:max-w-2xl bg-slate-900 text-yellow-50">
-                    <div className="grid gap-4">
-                        <div className="flex justify-between">
-                            <div>
-                                <h1 className="font-bold text-4xl md:text-5xl">Are you sure?</h1>
-                                <p className="text-slate-500">You can't undo this action.</p>
-                            </div>
-                            <button onClick={() => props.setConfirmationOpen(false)} className="grid place-items-center w-7 h-7 rounded-sm p-1 bg-red-500"><FaTimes /></button>
-                        </div>
-                        <form action={handleConfirmation} className="grid gap-2 font-semibold md:flex md:justify-between">
-                            <button className="group relative overflow-hidden flex-1 rounded-sm p-2 outline outline-emerald-600 text-emerald-600">
-                                <span className="absolute inset-0 z-0 transition-transform duration-250 translate-y-full group-hover:translate-y-0 bg-emerald-600"></span>
-                                <span className="relative z-10 transition-all duration-350 group-hover:text-yellow-50">Yes</span>
-                            </button>
-                            <button type="button" onClick={() => props.setConfirmationOpen(false)} className="group relative overflow-hidden flex-1 rounded-sm p-2 outline outline-red-500 text-red-500">
-                                <span className="absolute inset-0 z-0 transition-transform duration-250 translate-y-full group-hover:translate-y-0 bg-red-500"></span>
-                                <span className="relative z-10 transition-all duration-350 group-hover:text-yellow-50">No</span>
-                            </button>
-                        </form>
+            <div onClick={() => props.setConfirmation(prev => ({ ...prev, open: false }))} className="fixed z-49 inset-0 bg-black/60"></div>
+            <div className="fixed inset-x-4 mx-auto top-1/2 -translate-y-1/2 rounded-md p-4 z-50 text-base sm:w-lg md:text-lg 2xl:max-w-2xl border border-slate-700/20 bg-slate-950 text-white">
+                <div className="grid gap-4">
+                    <div className="grid gap-2">
+                        <h1 className="font-bold text-3xl md:text-4xl">Are you sure?</h1>
+                        <p className="text-slate-500">You can't undo this action.</p>
                     </div>
+                    <div className="absolute right-4 top-4">
+                        <button onClick={() => props.setConfirmation(prev => ({ ...prev, open: false }))} className="p-2 grid place-items-center rounded-sm hover:bg-slate-700/50"><FaTimes /></button>
+                    </div>
+                    <form action={handleConfirmation} className="flex gap-2 font-semibold">
+                        <button type="submit" className="group relative flex-1 overflow-hidden rounded-sm p-2 border border-rose-400 text-rose-400">
+                            <span className="absolute inset-0 z-0 transition-transform duration-200 translate-y-full group-hover:translate-y-0 bg-rose-700"></span>
+                            <span className="relative z-10 transition-all duration-200 group-hover:text-white">Confirm</span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </>

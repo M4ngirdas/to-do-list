@@ -1,23 +1,48 @@
 
-import { FaPlus, FaTimes } from "react-icons/fa"
+import { useState, useRef, useEffect } from "react"
+import { FaAngleUp, FaBars, FaPlus, FaTimes } from "react-icons/fa"
 
 export default function Menu(props) {
 
-    const todoElements = props.todos.map(todo => (
-        <li key={todo.id} className="flex h-12 w-60 rounded-sm outline-2 outline-slate-800">
-            <div onClick={() => { props.openTodo(todo.id); props.setMenuOpen(false) }} className="flex justify-between items-center gap-2 cursor-default w-60 p-2">
-                <p onClick={() => { props.openTodo(todo.id); props.setMenuOpen(false) }} className="truncate w-45">{todo.title}</p>
+    const [isScrollbarVisible, setIsScrollbarVisible] = useState(false)
+
+    const listContainerRef = useRef(null)
+
+    useEffect(() => (
+        setIsScrollbarVisible(listContainerRef.current?.scrollHeight > listContainerRef.current?.clientHeight)
+    ), [props.lists.length])
+
+    const listElements = props.lists.map(list => (
+        <li key={list.id} className={`${props.currentList.id === list.id ? "bg-slate-800/50" : ""} group flex items-center p-2 w-full h-11 md:h-12 rounded-sm overflow-hidden border border-slate-700/50 hover:bg-slate-800/30`}>
+            <div onClick={() => { props.openList(list.id); props.setIsMobileMenuOpen(false) }} className="flex gap-2 w-full cursor-pointer overflow-hidden">
+                <p className="truncate">{list.title}</p>
             </div>
-            <div className="grid place-items-center p-2">
-                <button onClick={() => props.showConfirmation("todos", todo.id)} className="grid place-items-center h-7 w-7 rounded-sm hover:bg-red-500"><FaTimes /></button>
+            <div className="grid place-items-center">
+                <button onClick={() => props.showConfirmation("list", list.id)} className="grid md:opacity-0 place-items-center h-7 w-7 duration-200 rounded-sm hover:bg-rose-700 group-hover:opacity-100"><FaTimes /></button>
             </div>
         </li>
     ))
 
     return (
-        <nav className="flex flex-col items-start gap-4 p-0 md:p-6">
-            <button onClick={() => props.showSettings("menu")} className="flex justify-between items-center font-semibold h-12 ml-1 p-2 gap-2 rounded-sm w-60 outline-none bg-slate-800">Create new <span className="px-2"><FaPlus /></span></button>
-            <ul className="scrollbar grid gap-2 pr-2 p-1 overflow-y-auto">{todoElements}</ul>
-        </nav>
+        <>
+            {/* for width more or equal to 768px */}
+            <nav className="hidden md:grid content-start gap-4 p-6 w-80 rounded-md border-r border-slate-800" >
+                <button onClick={props.showSettings} className="flex items-center w-full h-11 md:h-12 p-2 gap-2 font-semibold rounded-sm border border-slate-700/50 bg-slate-800/60"><span className="px-2"><FaPlus /></span>Create new list</button>
+                <div className="flex flex-col gap-2 h-full overflow-hidden">
+                    <p className="font-medium text-slate-500">MY LISTS</p>
+                    <ul ref={listContainerRef} className={`${isScrollbarVisible ? "pr-2" : ""} grid gap-2 overflow-y-auto scrollbar`}>{listElements}</ul>
+                </div>
+            </nav>
+
+            {/* for width below 768px */}
+            <nav className={`${props.isMobileMenuOpen ? "translate-y-0 p-4" : "-translate-y-[96%] p-0"} flex md:hidden flex-col gap-4 fixed inset-4 transition-all duration-200 rounded-sm border border-slate-700/50 bg-gray-950`}>
+                <button onClick={props.showSettings} className="flex items-center gap-2 p-2 h-11 md:h-12 font-semibold rounded-sm border border-slate-700/50 bg-slate-800/60"><span className="px-2"><FaPlus /></span>Create new list</button>
+                <p className="font-medium text-slate-500">MY LISTS</p>
+                <ul ref={listContainerRef} className={`${isScrollbarVisible ? "pr-2" : ""} grid content-start gap-2 flex-1 overflow-y-auto scrollbar`}>{listElements}</ul>
+                <div className="flex justify-center w-full">
+                    <button onClick={() => props.setIsMobileMenuOpen(prev => !prev)} className="flex rounded-sm justify-center items-center h-11 md:h-12 w-full hover:bg-slate-700/30">{props.isMobileMenuOpen ? <FaAngleUp /> : <span className="flex items-center gap-2"><FaBars /> Menu</span>}</button>
+                </div>
+            </nav>
+        </>
     )
 }

@@ -1,172 +1,126 @@
-
 import { useState, useEffect } from "react"
-import { nanoid } from "nanoid"
-import { FaBars, FaPlus, FaTimes } from "react-icons/fa"
+import { FaPlus } from "react-icons/fa"
 
-import Todo from "./components/Todo.jsx"
-import Task from "./components/Task.jsx"
+import List from "./components/List.jsx"
 import Menu from "./components/Menu.jsx"
 import Settings from "./components/Settings.jsx"
 import Confirmation from "./components/Confirmation.jsx"
 
 export default function App() {
-
-    const [todos, setTodos] = useState(() => {
-        const savedTodos = localStorage.getItem("todos")
-        return savedTodos ? JSON.parse(savedTodos) : []
+    const [lists, setLists] = useState(() => {
+        const savedLists = localStorage.getItem("lists")
+        return savedLists ? JSON.parse(savedLists) : []
     })
-    const [confirmationOpen, setConfirmationOpen] = useState(false)
-    const [confirmationSource, setConfirmationSource] = useState(null)
-    const [settingsOpen, setSettingsOpen] = useState(false)
-    const [settingsSource, setSettingsSource] = useState(null)
-    const [menuOpen, setMenuOpen] = useState(false)
-    const [selectedTodoId, setSelectedTodoId] = useState(null)
 
-    const currentTodo = todos.find(todo => todo.open)
-    const tasksLength = currentTodo?.tasks.length
-    const completedTaskCount = currentTodo?.tasks.filter(task => task.checked).length
+    const [confirmation, setConfirmation] = useState({ open: false, source: null })
+    const [settings, setSettings] = useState({ open: false, source: null })
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [selectedListId, setSelectedListId] = useState(null)
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-    useEffect(() => (
-        localStorage.setItem("todos", JSON.stringify(todos))
-    ), [todos])
+    const currentList = lists.find(list => list.open)
+    const tasksLength = currentList?.tasks.length
+    const completedTaskCount = currentList?.tasks.filter(task => task.checked).length
 
-    function openTodo(id) {
-        setTodos(prevTodos => prevTodos.map(todo => (
-            { ...todo, open: id === todo.id }
-        )))
+    useEffect(() => {
+        localStorage.setItem("lists", JSON.stringify(lists))
+    }, [lists])
+
+    function openList(id) {
+        setLists(prev => prev.map(list => ({
+            ...list,
+            open: id === list.id
+        })))
     }
 
     function showSettings(source) {
-        setSettingsSource(source)
-        setSettingsOpen(true)
+        setSettings({ open: true, source: source })
     }
 
-    function addTask(formData) {
-        const task = formData.get("taskInput")
-        if (task.trim().length === 0) return
-        setTodos(prevTodos => prevTodos.map(todo => (
-            todo.open ? { ...todo, tasks: [...todo.tasks, { id: nanoid(), value: task, checked: false }] } : todo
-        )))
+    function showConfirmation(source, id) {
+        if (id) setSelectedListId(id)
+        setConfirmation({ open: true, source: source })
     }
 
-    function checkTask(id) {
-        setTodos(prevTodos => prevTodos.map(todo => (
-            {
-                ...todo,
-                tasks: todo.tasks.map(task => id === task.id ? { ...task, checked: !task.checked } : task)
-            }
-        )))
-    }
-
-    function removeTask(id) {
-        setTodos(prevTodos => prevTodos.map(todo => (
-            {
-                ...todo,
-                tasks: todo.tasks.filter(task => id === task.id ? !task : task)
-            }
-        )))
-    }
-
-    function removeTodo(id) {
-        todos.length === 1 ? setMenuOpen(false) : null
-        setTodos(prevTodos => {
-            const filtered = prevTodos.filter(todo => id !== todo.id)
-            filtered.length > 0 ? openTodo(filtered[0].id) : null
+    function removeList(id) {
+        if (lists.length === 1) setIsMobileMenuOpen(false)
+        setLists(prev => {
+            const filtered = prev.filter(list => id !== list.id)
+            if (filtered.length > 0) openList(filtered[0].id)
             return filtered
         })
     }
 
-    function showConfirmation(source, id) {
-        if (id) setSelectedTodoId(id)
-        setConfirmationSource(source)
-        setConfirmationOpen(true)
-    }
-
-    const taskElements = todos.map(todo => todo.open ? todo.tasks.map(task => (
-        <Task
-            key={task.id}
-            value={task.value}
-            checked={task.checked}
-            checkTask={() => checkTask(task.id)}
-            removeTask={() => removeTask(task.id)}
-        />
-    )) : null)
-
     return (
         <>
             <div className="flex h-screen">
-                <div>
-                    <div className="block md:hidden">
-                        {todos.length === 0 ? <div className="p-6">
-                            <button onClick={() => showSettings("menu")} className="flex justify-between items-center w-60 font-semibold ml-1 gap-2 p-2 rounded-sm bg-slate-800">Create new <FaPlus /></button>
-                        </div> : null}
-                        <div className={`${menuOpen ? "flex" : "hidden"} justify-between gap-4 w-full sm:w-fit p-6 fixed z-48 h-full bg-gray-950`}>
-                            <Menu
-                                showSettings={showSettings}
-                                openTodo={openTodo}
-                                setTodos={setTodos}
-                                todos={todos}
-                                currentTodo={currentTodo}
-                                forSmallerScreens={true}
-                                setMenuOpen={setMenuOpen}
-                                confirmationOpen={confirmationOpen}
-                                setConfirmationOpen={setConfirmationOpen}
-                                showConfirmation={showConfirmation}
-                            />
-                            <div>
-                                <button onClick={() => setMenuOpen(false)} className="grid place-items-center h-7 w-7 rounded-sm p-1 bg-red-500"><FaTimes /></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="hidden md:flex">
+                {lists.length > 0 ? (
+                    <div className={`${isMobileMenuOpen ? "w-full" : ""} flex fixed h-full z-30 md:relative`}>
                         <Menu
-                            showSettings={showSettings}
-                            openTodo={openTodo}
-                            setTodos={setTodos}
-                            todos={todos}
-                            currentTodo={currentTodo}
-                            forSmallerScreens={false}
-                            setMenuOpen={setMenuOpen}
-                            confirmationOpen={confirmationOpen}
-                            setConfirmationOpen={setConfirmationOpen}
+                            showSettings={() => showSettings("create")}
+                            openList={openList}
+                            setLists={setLists}
+                            lists={lists}
+                            currentList={currentList}
                             showConfirmation={showConfirmation}
+                            setIsMobileMenuOpen={setIsMobileMenuOpen}
+                            isMobileMenuOpen={isMobileMenuOpen}
                         />
                     </div>
-                </div>
-                {todos.length === 0 ? <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                    <h1 className="text-4xl">You haven't created a to-do list yet!</h1>
-                    <h2>Click create new to make one</h2>
-                </div> : null}
-                {todos.length > 0 ? <main className="flex flex-col items-center flex-1 gap-4 p-6 text-base md:text-lg">
-                    {todos.length > 0 ? <button onClick={() => setMenuOpen(true)} className="flex justify-center items-center gap-2 w-full p-2 rounded-sm md:hidden outline outline-slate-800 bg-slate-900"><FaBars />Menu</button> : null}
-                    <Todo
-                        currentTodo={currentTodo}
-                        tasksLength={tasksLength}
-                        completedTaskCount={completedTaskCount}
-                        addTask={addTask}
-                        taskElements={taskElements}
-                        showSettings={showSettings}
-                        todos={todos}
-                        confirmationOpen={confirmationOpen}
-                        setConfirmationOpen={setConfirmationOpen}
-                        showConfirmation={showConfirmation}
-                    />
-                </main> : null}
+                ) : null}
+
+                {lists.length === 0 ? (
+                    <div className="flex justify-center items-center w-full">
+                        <div className="grid gap-8 rounded-md">
+                            <div className="grid gap-2">
+                                <h1 className="font-bold text-4xl md:text-5xl">It's empty here...</h1>
+                                <p className="text-lg text-slate-500">Create a list to get started!</p>
+                            </div>
+                            <button onClick={() => showSettings("create")} className="flex items-center font-semibold h-11 md:h-12 p-2 gap-2 rounded-sm w-full border border-slate-700/50 bg-slate-800/60">
+                                <span className="px-2"><FaPlus /></span>Create new list
+                            </button>
+                        </div>
+                    </div>
+                ) : null}
+
+                {lists.length > 0 ? (
+                    <main className="flex flex-col gap-8 p-4 md:p-8 w-full overflow-hidden bg-slate-950">
+                        <List
+                            currentList={currentList}
+                            tasksLength={tasksLength}
+                            completedTaskCount={completedTaskCount}
+                            showSettings={() => showSettings("edit")}
+                            setLists={setLists}
+                            confirmation={confirmation}
+                            showConfirmation={showConfirmation}
+                            isDropdownOpen={isDropdownOpen}
+                            setIsDropdownOpen={setIsDropdownOpen}
+                        />
+                    </main>
+                ) : null}
             </div>
-            {settingsOpen ? <Settings
-                setSettingsOpen={setSettingsOpen}
-                settingsSource={settingsSource}
-                setTodos={setTodos}
-                todos={todos}
-                currentTodo={currentTodo}
-            /> : null}
-            {confirmationOpen ? <Confirmation
-                setConfirmationOpen={setConfirmationOpen}
-                confirmationSource={confirmationSource}
-                setTodos={setTodos}
-                selectedTodoId={selectedTodoId}
-                removeTodo={removeTodo}
-            /> : null}
+
+            {settings.open ? (
+                <Settings
+                    settings={settings}
+                    setSettings={setSettings}
+                    setLists={setLists}
+                    lists={lists}
+                    currentList={currentList}
+                    setIsDropdownOpen={setIsDropdownOpen}
+                />
+            ) : null}
+
+            {confirmation.open ? (
+                <Confirmation
+                    confirmation={confirmation}
+                    setConfirmation={setConfirmation}
+                    setLists={setLists}
+                    selectedListId={selectedListId}
+                    removeList={removeList}
+                    setIsDropdownOpen={setIsDropdownOpen}
+                />
+            ) : null}
         </>
     )
 }

@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 
 @theme {
@@ -6,15 +7,15 @@
 
 @layer base {
     body {
-        @apply bg-slate-950 text-yellow-50
+        @apply bg-slate-950 text-white;
     }
 
     * {
-        @apply font-display
+        @apply font-display;
     }
 
     button {
-        @apply cursor-pointer select-none
+        @apply cursor-pointer select-none;
     }
 
     meter::-webkit-meter-bar {
@@ -23,28 +24,28 @@
     }
 
     meter::-webkit-meter-optimum-value {
-        background: #059669;
+        background: #047857;
     }
 }
 
 @layer components {
     #root {
-        @apply h-full
+        @apply h-full;
     }
 
     .floating-label {
-        @apply pointer-events-none select-none absolute ml-5 left-0 top-1/2 -translate-y-1/2 transition-all duration-200 font-semibold cursor-text bg-slate-900 text-slate-500 peer-focus:top-0 peer-focus:px-2 peer-focus:ml-2 peer-focus:text-sm md:peer-focus:text-base peer-focus:text-yellow-50 peer-valid:top-0 peer-valid:ml-2 peer-valid:px-2 peer-valid:text-sm md:peer-valid:text-base
+        @apply pointer-events-none select-none absolute ml-5 left-0 -translate-y-1/2 transition-all duration-200 font-medium cursor-text bg-slate-900 text-slate-500 peer-focus:px-2 peer-focus:ml-2 peer-focus:text-sm md:peer-focus:text-sm peer-focus:text-white peer-not-placeholder-shown:ml-2 peer-not-placeholder-shown:px-2 peer-not-placeholder-shown:text-sm md:peer-not-placeholder-shown:text-sm;
     }
 
     .scrollbar::-webkit-scrollbar {
-        @apply w-3
+        @apply w-3;
     }
 
     .scrollbar::-webkit-scrollbar-track {
-        @apply rounded-xl bg-slate-900
+        @apply rounded-xl bg-slate-900;
     }
 
     .scrollbar::-webkit-scrollbar-thumb {
-        @apply rounded-xl bg-slate-800
+        @apply rounded-xl bg-slate-800;
     }
 }
