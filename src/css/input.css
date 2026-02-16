@@ -33,6 +33,10 @@
         @apply h-full;
     }
 
+    .tooltip {
+        @apply whitespace-nowrap absolute z-50 mt-2 px-2 pointer-events-none rounded-sm opacity-0 peer-hover:transition-opacity peer-hover:duration-200 peer-hover:opacity-100 text-slate-950 bg-white;
+    }
+
     .floating-label {
         @apply pointer-events-none select-none absolute ml-5 left-0 -translate-y-1/2 transition-all duration-200 font-medium cursor-text bg-slate-900 text-slate-500 peer-focus:px-2 peer-focus:ml-2 peer-focus:text-sm md:peer-focus:text-sm peer-focus:text-white peer-not-placeholder-shown:ml-2 peer-not-placeholder-shown:px-2 peer-not-placeholder-shown:text-sm md:peer-not-placeholder-shown:text-sm;
     }

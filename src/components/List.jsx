@@ -47,9 +47,9 @@ export default function List(props) {
     }
 
 
-    const taskElements = props.currentList.tasks.map(task =>
+    const taskElements = props.currentList?.tasks.map(task =>
         <li key={task.id} className="flex gap-2 w-full">
-            <button onClick={() => checkTask(task.id)} className={`${task.checked ? "bg-emerald-700" : "border border-slate-700/50 text-transparent"} grid place-items-center w-11 md:w-12 h-11 md:h-12 rounded-sm`}><FaCheck /></button>
+            <button onClick={() => checkTask(task.id)} className={`${task.checked ? "bg-emerald-700" : "border border-slate-700/50 text-transparent hover:text-slate-700/50 hover:bg-slate-700/20"} grid place-items-center w-11 md:w-12 h-11 md:h-12 rounded-sm transition-colors duration-200 active:scale-95`}><FaCheck /></button>
             <div className="flex justify-between items-center gap-2 flex-1 p-2 rounded-sm bg-slate-900" >
                 <p className={`${task.checked ? "text-emerald-800 line-through" : "text-white"} truncate w-1 flex-1`}>{task.value}</p>
                 <button onClick={() => removeTask(task.id)} className="grid place-items-center w-7 h-7 rounded-sm duration-200 hover:bg-rose-700"><FaTimes /></button>
@@ -67,9 +67,9 @@ export default function List(props) {
                         <p className="text-slate-500">{props.currentList ? props.currentList.desc : null}</p>
                     </div>
                     <div>
-                        <button title="Options" onClick={() => props.setIsDropdownOpen(prev => !prev)} ><FaEllipsisV /></button>
-                        <ul className={`${props.isDropdownOpen ? "scale-100 opacity-100" : "scale-0 opacity-0"} z-40 overflow-hidden transition-all duration-200 origin-top-right gap-2 absolute right-0 rounded-md border border-slate-800 bg-slate-900`}>
-                            <li onClick={props.showSettings} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 bg-slate-900 hover:bg-slate-800/60"> <span className="px-2"><FaEdit /></span> Edit list</li>
+                        <button title="List options" onClick={() => props.setIsDropdownOpen(prev => !prev)} className="rounded-full p-2 hover:bg-slate-700/50" ><FaEllipsisV /></button>
+                        <ul className={`${props.isDropdownOpen ? "scale-100 opacity-100" : "scale-0 opacity-0"} z-40 overflow-hidden transition-all duration-200 origin-top-right gap-2 absolute right-0 rounded-md border border-slate-700/50 bg-slate-900`}>
+                            <li onClick={props.showSettings} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 bg-slate-900 hover:bg-slate-700/50"> <span className="px-2"><FaEdit /></span> Edit list</li>
                             {props.tasksLength > 0 ? <li onClick={() => props.showConfirmation("task", props.currentList.id)} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 text-rose-400 hover:bg-rose-700/20"> <span className="px-2"><FaEraser /></span> Erase tasks</li> : null}
                             <li onClick={() => props.showConfirmation("list", props.currentList.id)} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 text-rose-400 hover:bg-rose-700/20"> <span className="px-2"><FaTrashAlt /></span> Delete list</li>
                         </ul>
@@ -77,7 +77,7 @@ export default function List(props) {
                 </div>
                 <div className={`${props.tasksLength === 0 ? "h-fit" : "min-h-full"} grid gap-6`}>
                     <form action={addTask} className="flex gap-2 w-full">
-                        <button type="submit" className="grid place-items-center w-11 md:w-12 h-11 md:h-12 rounded-sm bg-slate-700/50"><FaPlus /></button>
+                        <button type="submit" className="grid place-items-center w-11 md:w-12 h-11 md:h-12 rounded-sm bg-slate-700/50 active:scale-95 hover:bg-slate-700/70"><FaPlus /></button>
                         <div className="relative flex-1 h-fit">
                             <Input
                                 labelText="Enter task here..."

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react"
 import { FaPlus } from "react-icons/fa"
 
@@ -76,7 +77,7 @@ export default function App() {
                                 <h1 className="font-bold text-4xl md:text-5xl">It's empty here...</h1>
                                 <p className="text-lg text-slate-500">Create a list to get started!</p>
                             </div>
-                            <button onClick={() => showSettings("create")} className="flex items-center font-semibold h-11 md:h-12 p-2 gap-2 rounded-sm w-full border border-slate-700/50 bg-slate-800/60">
+                            <button onClick={() => showSettings("create")} className="flex items-center font-semibold h-11 md:h-12 p-2 gap-2 rounded-sm w-full border border-slate-700/50 bg-slate-800/60 hover:bg-slate-700/50">
                                 <span className="px-2"><FaPlus /></span>Create new list
                             </button>
                         </div>
