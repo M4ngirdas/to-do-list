@@ -12,7 +12,6 @@ export default function App() {
         const savedLists = localStorage.getItem("lists")
         return savedLists ? JSON.parse(savedLists) : []
     })
-
     const [confirmation, setConfirmation] = useState({ open: false, source: null })
     const [settings, setSettings] = useState({ open: false, source: null })
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)

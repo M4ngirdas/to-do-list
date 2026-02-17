@@ -15,7 +15,7 @@ export default function Input(props) {
     return (
         <>
             <input
-                className={`${props.input.status !== "normal" ? props.input.status === "error" ? "outline-rose-400" : "outline-yellow-500" : "outline-slate-700/50 focus:outline-white"} peer select-none w-full h-11 md:h-12 p-2 rounded-sm outline`}
+                className={`${props.input.status !== "normal" ? props.input.status === "error" ? "outline-rose-400" : "outline-yellow-500" : "outline-slate-700/50 focus:outline-white"} peer select-none w-full h-11 md:h-12 p-2 rounded-sm transition-colors duration-200 outline`}
                 ref={props.ref}
                 type="text"
                 placeholder=" "

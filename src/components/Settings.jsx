@@ -72,7 +72,7 @@ export default function Settings(props) {
                         </div>
                         <div className={`${titleInput.status !== "normal" ? "mt-4" : "mt-0"} ${descInput.status === "warning" ? "mb-4" : "mb-0"} transition-all duration-200 flex flex-1 relative`}>
                             <textarea
-                                className={`${descInput.status !== "normal" ? "outline-amber-400" : "outline-slate-700/50 focus:outline-white"} peer resize-none select-none w-full px-2 py-3 rounded-sm outline scrollbar`}
+                                className={`${descInput.status !== "normal" ? "outline-amber-400" : "outline-slate-700/50 focus:outline-white"} peer resize-none select-none w-full px-2 py-3 rounded-sm transition-colors duration-200 outline scrollbar`}
                                 name="descInput"
                                 placeholder=" "
                                 maxLength={200}

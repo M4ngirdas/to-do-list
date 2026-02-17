@@ -6,10 +6,11 @@ import { nanoid } from "nanoid"
 import Input from "./Input.jsx"
 
 export default function List(props) {
-    const [taskInput, setTaskInput] = useState({ value: null, status: "normal" })
+    const [addTaskInput, setAddTaskInput] = useState({ value: null, status: "normal" })
+    const [isTaskInputEmpty, setIsTaskInputEmpty] = useState(false)
     const [isScrollbarVisible, setIsScrollbarVisible] = useState(false)
 
-    const taskInputRef = useRef(null)
+    const addTaskInputRef = useRef(null)
     const taskContainerRef = useRef(null)
 
     useEffect(() => (
@@ -17,19 +18,26 @@ export default function List(props) {
     ), [props.tasksLength])
 
     function addTask(formData) {
-        const task = formData.get("taskInput")
+        const task = formData.get("addTaskInput")
 
         if (task.trim().length === 0) {
-            setTaskInput(prev => ({ ...prev, status: "error" }))
-            taskInputRef.current?.focus()
+            setAddTaskInput(prev => ({ ...prev, status: "error" }))
+            addTaskInputRef.current?.focus()
             return
         }
         else {
-            setTaskInput(prev => ({ ...prev, status: "normal" }))
+            setAddTaskInput(prev => ({ ...prev, status: "normal" }))
         }
         props.setLists(prev => prev.map(list => (
             list.open ? { ...list, tasks: [...list.tasks, { id: nanoid(), value: task, checked: false }] } : list
         )))
+    }
+
+    function editTask(id, ev) {
+        props.setLists(prev => prev.map(list => ({
+            ...list,
+            tasks: list.tasks.map(task => id === task.id ? { ...task, value: ev.target.value } : task)
+        })))
     }
 
     function checkTask(id) {
@@ -46,12 +54,29 @@ export default function List(props) {
         })))
     }
 
-
     const taskElements = props.currentList?.tasks.map(task =>
         <li key={task.id} className="flex gap-2 w-full">
-            <button onClick={() => checkTask(task.id)} className={`${task.checked ? "bg-emerald-700" : "border border-slate-700/50 text-transparent hover:text-slate-700/50 hover:bg-slate-700/20"} grid place-items-center w-11 md:w-12 h-11 md:h-12 rounded-sm transition-colors duration-200 active:scale-95`}><FaCheck /></button>
+            <button title={task.checked ? "Uncheck task" : "Check task"} onClick={() => checkTask(task.id)} className={`${task.checked ? "bg-emerald-700" : "border border-slate-700/50 text-transparent hover:text-slate-700/50 hover:bg-slate-700/20"} grid place-items-center w-11 md:w-12 h-11 md:h-12 rounded-sm transition-colors duration-200 active:scale-95`}><FaCheck /></button>
             <div className="flex justify-between items-center gap-2 flex-1 p-2 rounded-sm bg-slate-900" >
-                <p className={`${task.checked ? "text-emerald-800 line-through" : "text-white"} truncate w-1 flex-1`}>{task.value}</p>
+                <input
+                    type="text"
+                    title="Edit task"
+                    onBlur={() => {
+                        if (isTaskInputEmpty) {
+                            removeTask(task.id)
+                            setIsTaskInputEmpty(false)
+                        }
+                    }}
+                    onChange={ev => {
+                        editTask(task.id, ev)
+                        if (ev.target.value.length === 0) {
+                            setIsTaskInputEmpty(true)
+                        }
+                    }}
+                    defaultValue={task.value}
+                    maxLength={100}
+                    className={`${task.checked ? "text-emerald-800 line-through" : "text-white"} truncate w-1 flex-1 py-1 outline-none trasition-colors duration-200 border-b border-transparent hover:border-slate-700/50 focus:border-white`}
+                />
                 <button onClick={() => removeTask(task.id)} className="grid place-items-center w-7 h-7 rounded-sm duration-200 hover:bg-rose-700"><FaTimes /></button>
             </div>
         </li >
@@ -82,11 +107,11 @@ export default function List(props) {
                             <Input
                                 labelText="Enter task here..."
                                 maxLength={100}
-                                ref={taskInputRef}
-                                input={taskInput}
-                                setInput={setTaskInput}
-                                name="taskInput"
-                                error={taskInput.error}
+                                ref={addTaskInputRef}
+                                input={addTaskInput}
+                                setInput={setAddTaskInput}
+                                name="addTaskInput"
+                                error={addTaskInput.error}
                             />
                         </div>
                     </form>
