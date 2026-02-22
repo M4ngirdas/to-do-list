@@ -61,6 +61,7 @@ export default function List(props) {
                 <input
                     type="text"
                     title="Edit task"
+                    disabled={task.checked}
                     onBlur={() => {
                         if (isTaskInputEmpty) {
                             removeTask(task.id)
@@ -75,7 +76,7 @@ export default function List(props) {
                     }}
                     defaultValue={task.value}
                     maxLength={100}
-                    className={`${task.checked ? "text-emerald-800 line-through" : "text-white"} truncate w-1 flex-1 py-1 outline-none trasition-colors duration-200 border-b border-transparent hover:border-slate-700/50 focus:border-white`}
+                    className={`${task.checked ? "text-emerald-800 line-through" : "text-white hover:border-slate-700/50 focus:border-white"} truncate w-1 flex-1 py-1 outline-none trasition-colors duration-200 border-b border-transparent`}
                 />
                 <button onClick={() => removeTask(task.id)} className="grid place-items-center w-7 h-7 rounded-sm duration-200 hover:bg-rose-700"><FaTimes /></button>
             </div>
@@ -87,7 +88,7 @@ export default function List(props) {
             {props.isDropdownOpen ? <div onClick={() => props.setIsDropdownOpen(false)} className="fixed inset-0 z-39"></div> : null}
             <section className={`${props.tasksLength === 0 ? "flex flex-col" : "grid content-start"} gap-4 mt-12 md:mt-0 min-h-0 h-full relative`}>
                 <div className="flex justify-between">
-                    <div title="Edit list" onClick={props.showSettings} className="cursor-pointer wrap-anywhere">
+                    <div title="Edit list" onClick={props.showSettings} className={`${props.currentList.desc ? "gap-2" : "gap-0"} grid cursor-pointer wrap-anywhere`}>
                         <h1 className="font-bold text-4xl md:text-5xl">{props.currentList ? props.currentList.title : null}</h1>
                         <p className="text-slate-500">{props.currentList ? props.currentList.desc : null}</p>
                     </div>

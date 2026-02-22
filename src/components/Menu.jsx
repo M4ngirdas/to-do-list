@@ -1,13 +1,20 @@
 
 import { useState, useRef, useEffect } from "react"
-import { FaAngleLeft, FaAngleRight, FaAngleUp, FaBars, FaPlus, FaTimes } from "react-icons/fa"
+import { FaAngleLeft, FaAngleRight, FaAngleUp, FaBars, FaPlus, FaRegCheckSquare, FaTimes } from "react-icons/fa"
 
 export default function Menu(props) {
 
     const [isScrollbarVisible, setIsScrollbarVisible] = useState(false)
-    const [isMenuOpen, setIsMenuOpen] = useState(true)
+    const [isMenuOpen, setIsMenuOpen] = useState(() => {
+        const saved = localStorage.getItem("isMenuOpen")
+        return saved === "true"
+    })
 
     const listContainerRef = useRef(null)
+
+    useEffect(() => (
+        localStorage.setItem("isMenuOpen", isMenuOpen)
+    ), [isMenuOpen])
 
     useEffect(() => (
         setIsScrollbarVisible(listContainerRef.current?.scrollHeight > listContainerRef.current?.clientHeight)
@@ -28,7 +35,8 @@ export default function Menu(props) {
         <>
             {/* for width more or equal to 768px */}
             <>
-                <nav className={`${isMenuOpen ? "hidden md:grid" : "hidden"} transition-transform duration-200 content-start gap-4 relative p-6 w-80 rounded-md`} >
+                <nav className={`${isMenuOpen ? "hidden md:grid" : "hidden"} transition-transform duration-200 content-start gap-6 relative p-6 w-80 rounded-md`} >
+                    <img onClick={() => window.location.reload()} className="w-full h-24 object-cover cursor-pointer" src="/src/assets/logo.png" alt="Tasked to-do list app logo" />
                     <button onClick={props.showSettings} className="flex items-center w-full h-11 md:h-12 p-2 gap-2 font-semibold rounded-sm border border-slate-700/50 bg-slate-800/60 hover:bg-slate-700/50"><span className="px-2"><FaPlus /></span>Create new list</button>
                     <div className="flex flex-col gap-2 h-full overflow-hidden">
                         <p className="font-medium text-slate-500">MY LISTS</p>
@@ -42,6 +50,7 @@ export default function Menu(props) {
 
             {/* for width below 768px */}
             <nav className={`${props.isMobileMenuOpen ? "translate-y-0 p-4" : "-translate-y-[96%] p-0"} flex md:hidden flex-col gap-4 fixed inset-4 transition-all duration-200 rounded-sm border border-slate-700/50 bg-gray-950`}>
+                <img onClick={() => window.location.reload()} className="w-full h-22 object-contain scale-375 cursor-pointer" src="/src/assets/logo.png" alt="Tasked to-do list app logo" />
                 <button onClick={props.showSettings} className="flex items-center gap-2 p-2 h-11 md:h-12 font-semibold rounded-sm border border-slate-700/50 bg-slate-800/60"><span className="px-2"><FaPlus /></span>Create new list</button>
                 <p className="font-medium text-slate-500">MY LISTS</p>
                 <ul ref={listContainerRef} className={`${isScrollbarVisible ? "pr-2" : ""} grid content-start gap-2 flex-1 overflow-y-auto scrollbar`}>{listElements}</ul>

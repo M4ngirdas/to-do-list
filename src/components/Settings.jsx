@@ -25,16 +25,18 @@ export default function Settings(props) {
             return
         }
         if (props.settings.source === "create") {
+            const newId = nanoid()
             props.setLists(prev =>
                 [...prev,
                 {
-                    id: nanoid(),
+                    id: newId,
                     title: title,
                     desc: desc,
                     tasks: [],
-                    open: props.lists.length === 0
+                    open: true
                 }]
             )
+            props.openList(newId)
         }
         else {
             props.setLists(prev => prev.map(list => (

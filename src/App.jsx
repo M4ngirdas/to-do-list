@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react"
-import { FaPlus } from "react-icons/fa"
+import { FaPlus, FaRegCheckSquare } from "react-icons/fa"
 
 import List from "./components/List.jsx"
 import Menu from "./components/Menu.jsx"
@@ -22,9 +22,9 @@ export default function App() {
     const tasksLength = currentList?.tasks.length
     const completedTaskCount = currentList?.tasks.filter(task => task.checked).length
 
-    useEffect(() => {
+    useEffect(() => (
         localStorage.setItem("lists", JSON.stringify(lists))
-    }, [lists])
+    ), [lists])
 
     function openList(id) {
         setLists(prev => prev.map(list => ({
@@ -44,11 +44,11 @@ export default function App() {
 
     function removeList(id) {
         if (lists.length === 1) setIsMobileMenuOpen(false)
-        setLists(prev => {
-            const filtered = prev.filter(list => id !== list.id)
-            if (filtered.length > 0) openList(filtered[0].id)
-            return filtered
-        })
+        const remainingLists = lists.filter(list => id !== list.id)
+        const removedListIndex = lists.findIndex(list => id === list.id)
+        const nextListIndex = removedListIndex === 0 ? 0 : removedListIndex - 1
+        setLists(remainingLists)
+        openList(remainingLists[nextListIndex]?.id)
     }
 
     return (
@@ -71,6 +71,9 @@ export default function App() {
 
                 {lists.length === 0 ? (
                     <div className="flex justify-center items-center w-full">
+                        <div className="absolute inset-0 w-80 p-6">
+                            <img onClick={() => window.location.reload()} className="w-full h-24 object-cover cursor-pointer" src="/src/assets/logo.png" alt="Tasked to-do list app logo" />
+                        </div>
                         <div className="grid gap-8 rounded-md">
                             <div className="grid gap-2">
                                 <h1 className="font-bold text-4xl md:text-5xl">It's empty here...</h1>
@@ -80,6 +83,7 @@ export default function App() {
                                 <span className="px-2"><FaPlus /></span>Create new list
                             </button>
                         </div>
+                        <p className="absolute bottom-0 p-6 text-slate-500">Created by <br /><a className="underline text-slate-400" target="_blank" href="https://github.com/M4ngirdas">M4ngirdas</a></p>
                     </div>
                 ) : null}
 
@@ -106,6 +110,7 @@ export default function App() {
                     setSettings={setSettings}
                     setLists={setLists}
                     lists={lists}
+                    openList={openList}
                     currentList={currentList}
                     setIsDropdownOpen={setIsDropdownOpen}
                 />
