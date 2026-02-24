@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react"
-import { FaPlus, FaRegCheckSquare } from "react-icons/fa"
+import { FaPlus } from "react-icons/fa"
 
 import List from "./components/List.jsx"
 import Menu from "./components/Menu.jsx"
@@ -55,7 +55,7 @@ export default function App() {
         <>
             <div className="flex h-screen">
                 {lists.length > 0 ? (
-                    <div className={`${isMobileMenuOpen ? "w-full" : ""} flex fixed h-full z-30 md:relative`}>
+                    <div className="flex fixed h-full z-30 md:relative">
                         <Menu
                             showSettings={() => showSettings("create")}
                             openList={openList}
@@ -71,15 +71,15 @@ export default function App() {
 
                 {lists.length === 0 ? (
                     <div className="flex justify-center items-center w-full">
-                        <div className="absolute inset-0 w-80 p-6">
-                            <img onClick={() => window.location.reload()} className="w-full h-24 object-cover cursor-pointer" src="/src/assets/logo.png" alt="Tasked to-do list app logo" />
+                        <div className="absolute inset-0 w-80 h-fit p-6">
+                            <img onClick={() => window.location.reload()} className="w-full h-24 object-cover cursor-pointer" src="./images/logo.png" alt="Tasked to-do list app logo" />
                         </div>
-                        <div className="grid gap-8 rounded-md">
+                        <div className="grid gap-8 rounded-md z-10">
                             <div className="grid gap-2">
                                 <h1 className="font-bold text-4xl md:text-5xl">It's empty here...</h1>
                                 <p className="text-lg text-slate-500">Create a list to get started!</p>
                             </div>
-                            <button onClick={() => showSettings("create")} className="flex items-center font-semibold h-11 md:h-12 p-2 gap-2 rounded-sm w-full border border-slate-700/50 bg-slate-800/60 hover:bg-slate-700/50">
+                            <button onClick={() => showSettings("create")} className="flex items-center font-semibold h-11 md:h-12 p-2 gap-2 rounded-sm w-full transition-transform duration-200 active:scale-95 border border-slate-700/50 bg-slate-800/60 hover:bg-slate-700/50">
                                 <span className="px-2"><FaPlus /></span>Create new list
                             </button>
                         </div>

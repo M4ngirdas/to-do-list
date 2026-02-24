@@ -88,7 +88,7 @@ export default function Settings(props) {
                         </div>
                     </section>
                     <div className="grid gap-2 font-semibold">
-                        <button type="submit" className="rounded-sm h-11 md:h-12 border border-slate-700/50 bg-slate-800/60 hover:bg-slate-700/50">{props.settings.source === "create" ? "Create new list" : "Save changes"}</button>
+                        <button type="submit" className="rounded-sm h-11 md:h-12 transition-transform duration-200 active:scale-95 border border-slate-700/50 bg-slate-800/60 hover:bg-slate-700/50">{props.settings.source === "create" ? "Create new list" : "Save changes"}</button>
                     </div>
                 </form>
             </div >

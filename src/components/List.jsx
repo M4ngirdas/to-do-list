@@ -13,9 +13,11 @@ export default function List(props) {
     const addTaskInputRef = useRef(null)
     const taskContainerRef = useRef(null)
 
-    useEffect(() => (
+    const completedTasksPercent = (props.completedTaskCount / props.tasksLength) * 100
+
+    useEffect(() => {
         setIsScrollbarVisible(taskContainerRef.current?.scrollHeight > taskContainerRef.current?.clientHeight)
-    ), [props.tasksLength])
+    }, [props.tasksLength])
 
     function addTask(formData) {
         const task = formData.get("addTaskInput")
@@ -56,11 +58,11 @@ export default function List(props) {
 
     const taskElements = props.currentList?.tasks.map(task =>
         <li key={task.id} className="flex gap-2 w-full">
-            <button title={task.checked ? "Uncheck task" : "Check task"} onClick={() => checkTask(task.id)} className={`${task.checked ? "bg-emerald-700" : "border border-slate-700/50 text-transparent hover:text-slate-700/50 hover:bg-slate-700/20"} grid place-items-center w-11 md:w-12 h-11 md:h-12 rounded-sm transition-colors duration-200 active:scale-95`}><FaCheck /></button>
+            <button title={task.checked ? "Uncheck task" : "Check task"} onClick={() => checkTask(task.id)} className={`${task.checked ? "bg-emerald-700 border-transparent" : "border border-slate-700/50 text-transparent hover:text-slate-700/50 hover:bg-slate-700/20"} grid place-items-center w-11 md:w-12 h-11 md:h-12 rounded-sm transition-all duration-200 active:scale-95`}><FaCheck /></button>
             <div className="flex justify-between items-center gap-2 flex-1 p-2 rounded-sm bg-slate-900" >
                 <input
                     type="text"
-                    title="Edit task"
+                    title={task.checked ? "" : "Edit task"}
                     disabled={task.checked}
                     onBlur={() => {
                         if (isTaskInputEmpty) {
@@ -78,7 +80,7 @@ export default function List(props) {
                     maxLength={100}
                     className={`${task.checked ? "text-emerald-800 line-through" : "text-white hover:border-slate-700/50 focus:border-white"} truncate w-1 flex-1 py-1 outline-none trasition-colors duration-200 border-b border-transparent`}
                 />
-                <button onClick={() => removeTask(task.id)} className="grid place-items-center w-7 h-7 rounded-sm duration-200 hover:bg-rose-700"><FaTimes /></button>
+                <button onClick={() => removeTask(task.id)} className="grid place-items-center w-7 h-7 rounded-sm hover:bg-rose-700"><FaTimes /></button>
             </div>
         </li >
     )
@@ -103,7 +105,7 @@ export default function List(props) {
                 </div>
                 <div className={`${props.tasksLength === 0 ? "h-fit" : "min-h-full"} grid gap-6`}>
                     <form action={addTask} className="flex gap-2 w-full">
-                        <button type="submit" className="grid place-items-center w-11 md:w-12 h-11 md:h-12 rounded-sm bg-slate-700/50 active:scale-95 hover:bg-slate-700/70"><FaPlus /></button>
+                        <button type="submit" className="grid place-items-center w-11 md:w-12 h-11 md:h-12 rounded-sm transition-transform duration-200 active:scale-95 bg-slate-700/50 hover:bg-slate-700/70"><FaPlus /></button>
                         <div className="relative flex-1 h-fit">
                             <Input
                                 labelText="Enter task here..."
@@ -118,8 +120,10 @@ export default function List(props) {
                     </form>
                     {props.tasksLength > 0 ? <div className="flex flex-col gap-2 min-h-full">
                         <div className="flex items-center gap-2">
-                            <meter className="flex-1 h-5" min={0} max={props.tasksLength} value={props.completedTaskCount}></meter>
-                            <p className={`${props.completedTaskCount === props.tasksLength ? "text-emerald-700" : "text-slate-500"} font-semibold`}>{props.currentList.tasks.length === props.completedTaskCount ? "All tasks are complete!" : `${props.completedTaskCount}/${props.currentList.tasks.length} complete`}</p>
+                            <div className="flex-1 h-2.5 rounded-full bg-slate-800">
+                                <div style={{ width: `${completedTasksPercent}%` }} className="h-2.5 rounded-full transition-all duration-200 bg-emerald-700"></div>
+                            </div>
+                            <p className={`${props.completedTaskCount === props.tasksLength ? "text-emerald-700" : "text-slate-500"} font-semibold`}>{`${props.completedTaskCount}/${props.tasksLength} complete`}</p>
                         </div>
                         <ul ref={taskContainerRef} className={`${isScrollbarVisible ? "pr-2" : ""} grid gap-2 h-full overflow-y-auto scrollbar`}>{taskElements}</ul>
                     </div> : null}

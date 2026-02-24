@@ -24,10 +24,7 @@ export default function Confirmation(props) {
                         <button onClick={() => props.setConfirmation(prev => ({ ...prev, open: false }))} className="p-2 grid place-items-center rounded-sm hover:bg-slate-700/50"><FaTimes /></button>
                     </div>
                     <form action={handleConfirmation} className="flex gap-2 font-semibold">
-                        <button type="submit" className="group relative flex-1 overflow-hidden rounded-sm p-2 border border-rose-400 text-rose-400">
-                            <span className="absolute inset-0 z-0 transition-transform duration-200 translate-y-full group-hover:translate-y-0 bg-rose-700"></span>
-                            <span className="relative z-10 transition-all duration-200 group-hover:text-white">Confirm</span>
-                        </button>
+                        <button type="submit" className="group relative flex-1 overflow-hidden rounded-sm p-2 border border-rose-400 text-rose-400 hover:border-transparent hover:bg-rose-700 hover:text-white">Confirm</button>
                     </form>
                 </div>
             </div>
