@@ -16,15 +16,6 @@
     button {
         @apply cursor-pointer select-none;
     }
-
-    /* meter::-webkit-meter-bar {
-        background: #1e293b;
-        border-radius: 12px;
-    }
-
-    meter::-webkit-meter-optimum-value {
-        background: #047857;
-    } */
 }
 
 @layer components {

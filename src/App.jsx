@@ -6,19 +6,21 @@ import List from "./components/List.jsx"
 import Menu from "./components/Menu.jsx"
 import Settings from "./components/Settings.jsx"
 import Confirmation from "./components/Confirmation.jsx"
+import logo from "./assets/images/logo.png"
 
 export default function App() {
     const [lists, setLists] = useState(() => {
         const savedLists = localStorage.getItem("lists")
         return savedLists ? JSON.parse(savedLists) : []
     })
-    const [confirmation, setConfirmation] = useState({ open: false, source: null })
-    const [settings, setSettings] = useState({ open: false, source: null })
+    const [confirmation, setConfirmation] = useState({ isOpen: false, source: null })
+    const [settings, setSettings] = useState({ isOpen: false, source: null })
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [selectedListId, setSelectedListId] = useState(null)
+    const [selectedList, setSelectedList] = useState(null)
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-    const currentList = lists.find(list => list.open)
+    const currentList = lists.find(list => list.isOpen)
     const tasksLength = currentList?.tasks.length
     const completedTaskCount = currentList?.tasks.filter(task => task.checked).length
 
@@ -29,17 +31,23 @@ export default function App() {
     function openList(id) {
         setLists(prev => prev.map(list => ({
             ...list,
-            open: id === list.id
+            isOpen: id === list.id
         })))
     }
 
+    function toggleListPinned(id) {
+        setLists(prev => prev.map(list => (
+            id === list.id ? { ...list, isPinned: !list.isPinned } : list
+        )))
+    }
+
     function showSettings(source) {
-        setSettings({ open: true, source: source })
+        setSettings({ isOpen: true, source: source })
     }
 
     function showConfirmation(source, id) {
         if (id) setSelectedListId(id)
-        setConfirmation({ open: true, source: source })
+        setConfirmation({ isOpen: true, source: source })
     }
 
     function removeList(id) {
@@ -57,11 +65,13 @@ export default function App() {
                 {lists.length > 0 ? (
                     <div className="flex fixed h-full z-30 md:relative">
                         <Menu
-                            showSettings={() => showSettings("create")}
+                            showSettings={showSettings}
                             openList={openList}
                             setLists={setLists}
                             lists={lists}
                             currentList={currentList}
+                            setSelectedList={setSelectedList}
+                            toggleListPinned={toggleListPinned}
                             showConfirmation={showConfirmation}
                             setIsMobileMenuOpen={setIsMobileMenuOpen}
                             isMobileMenuOpen={isMobileMenuOpen}
@@ -72,7 +82,7 @@ export default function App() {
                 {lists.length === 0 ? (
                     <div className="flex justify-center items-center w-full">
                         <div className="absolute inset-0 w-80 h-fit p-6">
-                            <img onClick={() => window.location.reload()} className="w-full h-24 object-cover cursor-pointer" src="./images/logo.png" alt="Tasked to-do list app logo" />
+                            <img onClick={() => window.location.reload()} src={logo} className="w-full h-24 object-cover cursor-pointer" alt="Tasked to-do list app logo" />
                         </div>
                         <div className="grid gap-8 rounded-md z-10">
                             <div className="grid gap-2">
@@ -93,7 +103,9 @@ export default function App() {
                             currentList={currentList}
                             tasksLength={tasksLength}
                             completedTaskCount={completedTaskCount}
-                            showSettings={() => showSettings("edit")}
+                            toggleListPinned={toggleListPinned}
+                            showSettings={showSettings}
+                            lists={lists}
                             setLists={setLists}
                             confirmation={confirmation}
                             showConfirmation={showConfirmation}
@@ -104,7 +116,7 @@ export default function App() {
                 ) : null}
             </div>
 
-            {settings.open ? (
+            {settings.isOpen ? (
                 <Settings
                     settings={settings}
                     setSettings={setSettings}
@@ -112,15 +124,17 @@ export default function App() {
                     lists={lists}
                     openList={openList}
                     currentList={currentList}
+                    selectedList={selectedList}
                     setIsDropdownOpen={setIsDropdownOpen}
                 />
             ) : null}
 
-            {confirmation.open ? (
+            {confirmation.isOpen ? (
                 <Confirmation
                     confirmation={confirmation}
                     setConfirmation={setConfirmation}
                     setLists={setLists}
+                    currentList={currentList}
                     selectedListId={selectedListId}
                     removeList={removeList}
                     setIsDropdownOpen={setIsDropdownOpen}

@@ -1,9 +1,10 @@
 
 import { useState, useEffect, useRef } from "react"
-import { FaCheck, FaEdit, FaEllipsisV, FaEraser, FaPlus, FaTimes, FaTrashAlt } from "react-icons/fa"
+import { FaBan, FaCheck, FaEdit, FaEllipsisV, FaEraser, FaPlus, FaThumbtack, FaTimes, FaTrashAlt, FaUncharted, FaUndo, FaUndoAlt } from "react-icons/fa"
 import { nanoid } from "nanoid"
 
 import Input from "./Input.jsx"
+import { FaThumbtackSlash } from "react-icons/fa6"
 
 export default function List(props) {
     const [addTaskInput, setAddTaskInput] = useState({ value: null, status: "normal" })
@@ -31,7 +32,7 @@ export default function List(props) {
             setAddTaskInput(prev => ({ ...prev, status: "normal" }))
         }
         props.setLists(prev => prev.map(list => (
-            list.open ? { ...list, tasks: [...list.tasks, { id: nanoid(), value: task, checked: false }] } : list
+            list.isOpen ? { ...list, tasks: [...list.tasks, { id: nanoid(), value: task, checked: false }] } : list
         )))
     }
 
@@ -90,16 +91,17 @@ export default function List(props) {
             {props.isDropdownOpen ? <div onClick={() => props.setIsDropdownOpen(false)} className="fixed inset-0 z-39"></div> : null}
             <section className={`${props.tasksLength === 0 ? "flex flex-col" : "grid content-start"} gap-4 mt-12 md:mt-0 min-h-0 h-full relative`}>
                 <div className="flex justify-between">
-                    <div title="Edit list" onClick={props.showSettings} className={`${props.currentList.desc ? "gap-2" : "gap-0"} grid cursor-pointer wrap-anywhere`}>
+                    <div title="Edit list" onClick={() => props.showSettings("edit")} className={`${props.currentList.desc ? "gap-2" : "gap-0"} grid cursor-pointer wrap-anywhere`}>
                         <h1 className="font-bold text-4xl md:text-5xl">{props.currentList ? props.currentList.title : null}</h1>
                         <p className="text-slate-500">{props.currentList ? props.currentList.desc : null}</p>
                     </div>
                     <div>
                         <button title="List options" onClick={() => props.setIsDropdownOpen(prev => !prev)} className="rounded-full p-2 hover:bg-slate-700/50" ><FaEllipsisV /></button>
                         <ul className={`${props.isDropdownOpen ? "scale-100 opacity-100" : "scale-0 opacity-0"} z-40 overflow-hidden transition-all duration-200 origin-top-right gap-2 absolute right-0 rounded-md border border-slate-700/50 bg-slate-900`}>
-                            <li onClick={props.showSettings} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 bg-slate-900 hover:bg-slate-700/50"> <span className="px-2"><FaEdit /></span> Edit list</li>
-                            {props.tasksLength > 0 ? <li onClick={() => props.showConfirmation("task", props.currentList.id)} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 text-rose-400 hover:bg-rose-700/20"> <span className="px-2"><FaEraser /></span> Erase tasks</li> : null}
-                            <li onClick={() => props.showConfirmation("list", props.currentList.id)} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 text-rose-400 hover:bg-rose-700/20"> <span className="px-2"><FaTrashAlt /></span> Delete list</li>
+                            <li onClick={() => { props.showSettings("edit"); props.setIsDropdownOpen(false) }} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 bg-slate-900 hover:bg-slate-700/50"> <span className="px-2"><FaEdit /></span> Edit list</li>
+                            <li onClick={() => {props.toggleListPinned(props.currentList.id); props.setIsDropdownOpen(false)}} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 bg-slate-900 hover:bg-slate-700/50"><span className="px-2">{props.currentList.isPinned ? <FaThumbtackSlash /> : <FaThumbtack />}</span> {props.currentList.isPinned ? "Unpin" : "Pin"} list</li>
+                            {props.tasksLength > 0 ? <li onClick={() => {props.showConfirmation("task", props.currentList.id); props.setIsDropdownOpen(false)}} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 text-rose-400 hover:bg-rose-700/20"> <span className="px-2"><FaEraser /></span> Erase tasks</li> : null}
+                            <li onClick={() => {props.showConfirmation("list", props.currentList.id); props.setIsDropdownOpen(false)}} className="flex items-center gap-2 cursor-pointer h-11 md:h-12 p-4 text-rose-400 hover:bg-rose-700/20"> <span className="px-2"><FaTrashAlt /></span> Delete list</li>
                         </ul>
                     </div>
                 </div>
