@@ -26,6 +26,8 @@ export default function Menu(props) {
 
     const pinnedLists = props.lists.filter(list => list.isPinned)
 
+    console.log(isScrollbarVisible)
+
     useEffect(() => (
         localStorage.setItem("isMenuOpen", isMenuOpen)
     ), [isMenuOpen])
@@ -46,7 +48,7 @@ export default function Menu(props) {
         update()
         window.addEventListener("resize", update)
         return () => window.removeEventListener("resize", update)
-    }, [props.lists, activeList])
+    }, [props.lists, activeList, isListsCollapsed])
 
     function handleContextMenu(id, x, y) {
         const clampedX = x + 160 > window.innerWidth ? x - 160 : x
