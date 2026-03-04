@@ -26,8 +26,6 @@ export default function Menu(props) {
 
     const pinnedLists = props.lists.filter(list => list.isPinned)
 
-    console.log(isScrollbarVisible)
-
     useEffect(() => (
         localStorage.setItem("isMenuOpen", isMenuOpen)
     ), [isMenuOpen])
@@ -130,7 +128,7 @@ export default function Menu(props) {
             {contextMenu.id === list.id ? <ul style={{ left: contextMenu.x, top: contextMenu.y }} className="z-40 overflow-hidden transition-all duration-200 origin-top-right w-40 absolute right-0 rounded-md border border-slate-700/50 bg-slate-900">
                 <li
                     onClick={() => {
-                        props.showSettings("editFromMenu")
+                        props.showSettings("editFromMenu", list.id)
                         props.setSelectedList({ title: list.title, desc: list.desc })
                         setContextMenu({ id: null, x: 0, y: 0 })
                     }}
@@ -173,10 +171,10 @@ export default function Menu(props) {
                     </div>
                 </div>
                 {activeList === "all" ? <ul ref={mobileListContainerRef} className={`${isScrollbarVisible.mobileAll ? "pr-2" : ""} grid content-start gap-2 flex-1 overflow-y-auto scrollbar`}>{listElements}</ul> : null}
-                {activeList === "pinned" ? <ul ref={mobilePinnedListContainerRef} className={`${isScrollbarVisible.mobilePinned ? "pr-2" : ""} grid content-start gap-2 flex-1 overflow-y-auto scrollbar`}>
+                {activeList === "pinned" ? <ul ref={mobilePinnedListContainerRef} className={`${isScrollbarVisible.mobilePinned ? "pr-2" : ""} ${pinnedLists.length === 0 ? "" : "content-start"} grid gap-2 h-full flex-1 overflow-y-auto scrollbar`}>
                     {pinnedListElements}
                     {pinnedLists.length === 0 ? <div className="flex flex-col justify-center items-center gap-2 h-full">
-                        <h1 className="font-bold text-4xl md:text-5xl">It's empty here...</h1>
+                        <h1 className="font-semibold text-4xl md:text-5xl">It's empty here...</h1>
                         <p className="text-lg text-slate-500">Hold or right click on a list to pin it.</p>
                     </div> : null}
                 </ul> : null}

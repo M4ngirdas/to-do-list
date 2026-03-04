@@ -41,7 +41,9 @@ export default function Settings(props) {
         }
         else {
             props.setLists(prev => prev.map(list => (
-                list.isOpen ? { ...list, title: title, desc: desc } : list
+                props.settings.source === "editFromMenu"
+                    ? props.selectedListId === list.id ? { ...list, title: title, desc: desc } : list
+                    : list.isOpen ? { ...list, title: title, desc: desc } : list
             )))
         }
         props.setSettings(prev => ({ ...prev, isOpen: false }))
@@ -53,7 +55,7 @@ export default function Settings(props) {
             <div onClick={() => props.setSettings(prev => ({ ...prev, isOpen: false }))} className="fixed inset-0 z-49 flex items-center justify-center p-4 bg-black/65"></div>
             <div className="flex flex-col gap-4 fixed inset-x-4 mx-auto top-1/2 -translate-y-1/2 text-base z-50 p-4 rounded-md h-7/12 sm:w-lg md:text-lg border border-slate-700/20 bg-slate-950 text-white">
                 <div className="grid gap-2">
-                    <h1 className="font-bold text-3xl md:text-4xl">{props.settings.source === "create" ? "Create new list" : "Edit list"}</h1>
+                    <h1 className="font-semibold text-3xl md:text-4xl">{props.settings.source === "create" ? "Create new list" : "Edit list"}</h1>
                     <p className="text-slate-500">{props.settings.source === "create" ? "Set up your new list info below." : "Change your list info below."}</p>
                 </div>
                 <div className="absolute right-4 top-4">

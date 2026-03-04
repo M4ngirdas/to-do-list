@@ -92,7 +92,7 @@ export default function List(props) {
             <section className={`${props.tasksLength === 0 ? "flex flex-col" : "grid content-start"} gap-4 mt-12 md:mt-0 min-h-0 h-full relative`}>
                 <div className="flex justify-between">
                     <div title="Edit list" onClick={() => props.showSettings("edit")} className={`${props.currentList.desc ? "gap-2" : "gap-0"} grid cursor-pointer wrap-anywhere`}>
-                        <h1 className="font-bold text-4xl md:text-5xl">{props.currentList ? props.currentList.title : null}</h1>
+                        <h1 className="font-semibold text-4xl md:text-5xl">{props.currentList ? props.currentList.title : null}</h1>
                         <p className="text-slate-500">{props.currentList ? props.currentList.desc : null}</p>
                     </div>
                     <div>
@@ -131,7 +131,7 @@ export default function List(props) {
                     </div> : null}
                 </div>
                 {props.tasksLength === 0 ? <div className="grid place-items-center content-center gap-2 flex-1">
-                    <h1 className="font-bold text-3xl md:text-4xl">It's empty here...</h1>
+                    <h1 className="font-semibold text-3xl md:text-4xl">It's empty here...</h1>
                     <p className="text-slate-500">Add a task!</p>
                 </div> : null}
             </section >

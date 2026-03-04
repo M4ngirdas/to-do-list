@@ -41,7 +41,8 @@ export default function App() {
         )))
     }
 
-    function showSettings(source) {
+    function showSettings(source, id) {
+        if (id) setSelectedListId(id)
         setSettings({ isOpen: true, source: source })
     }
 
@@ -86,7 +87,7 @@ export default function App() {
                         </div>
                         <div className="grid gap-8 rounded-md z-10">
                             <div className="grid gap-2">
-                                <h1 className="font-bold text-4xl md:text-5xl">It's empty here...</h1>
+                                <h1 className="font-semibold text-4xl md:text-5xl">It's empty here...</h1>
                                 <p className="text-lg text-slate-500">Create a list to get started!</p>
                             </div>
                             <button onClick={() => showSettings("create")} className="flex items-center font-semibold h-11 md:h-12 p-2 gap-2 rounded-sm w-full transition-transform duration-200 active:scale-95 border border-slate-700/50 bg-slate-800/60 hover:bg-slate-700/50">
@@ -125,6 +126,7 @@ export default function App() {
                     openList={openList}
                     currentList={currentList}
                     selectedList={selectedList}
+                    selectedListId={selectedListId}
                     setIsDropdownOpen={setIsDropdownOpen}
                 />
             ) : null}

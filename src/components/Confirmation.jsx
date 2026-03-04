@@ -17,7 +17,7 @@ export default function Confirmation(props) {
             <div className="fixed inset-x-4 mx-auto top-1/2 -translate-y-1/2 rounded-md p-4 z-50 text-base sm:w-lg md:text-lg 2xl:max-w-2xl border border-slate-700/20 bg-slate-950 text-white">
                 <div className="grid gap-4">
                     <div className="grid gap-2">
-                        <h1 className="font-bold text-3xl md:text-4xl">Are you sure?</h1>
+                        <h1 className="font-semibold text-3xl md:text-4xl">Are you sure?</h1>
                         <p className="text-slate-500">You can't undo this action.</p>
                     </div>
                     <div className="absolute right-4 top-4">
