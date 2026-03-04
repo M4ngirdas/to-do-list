@@ -12,7 +12,7 @@ export default function Menu(props) {
     const [activeList, setActiveList] = useState("all")
     const [isListsCollapsed, setIsListsCollapsed] = useState(() => {
         const saved = localStorage.getItem("isListsCollapsed")
-        return saved ? JSON.parse(saved) : { menu: true }
+        return saved ? JSON.parse(saved) : {}
     })
     const [isMenuOpen, setIsMenuOpen] = useState(() => {
         const saved = localStorage.getItem("isMenuOpen")
